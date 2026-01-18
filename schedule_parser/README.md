@@ -47,3 +47,22 @@
 > 
 > strucutred_table = sp.init_structured_table(url=url)
 > ```
+
+<h3>Как использовать кастомные классы и дни недели</h3>
+
+классы и дни недели можно передать в функцию `init_structured_table()`
+
+> [!NOTE]
+> ```
+> import schedule_parser as sp
+> url = (
+>     "https://docs.google.com/spreadsheets/d/" # гугл таблицы
+>     "1W9qMX1QzlZvBkNS0lwA7ZKyMGUlR9dBZnAE9JwqHRHg/export" # id таблицы
+>     "?format=csv&gid=917584427" # id страницы
+> )
+> days_of_week = ["понедельник", "вторник", "среда", "четверг", "пятница", "суббота"]
+> classes = ["5С", "6С", "7С", "8С", "9С", "10С", "10Т", "11С"]
+> 
+> strucutred_table = sp.init_structured_table(url=url, days_of_week=days_of_week, classes=classes)
+> ```
+
