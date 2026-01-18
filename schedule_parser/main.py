@@ -62,10 +62,3 @@ def init_structured_table():
                 strucutred_table[i][j].append(row[classes_indexes[j]:classes_indexes[j+1]])
 
     return strucutred_table
-
-
-strucutred_table = init_structured_table()
-
-# print(strucutred_table[0][1])
-# print()
-# print(strucutred_table[1][1])
