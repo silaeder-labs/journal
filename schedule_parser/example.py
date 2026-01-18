@@ -1,6 +1,6 @@
-import main as mn
+import schedule_parser as sp
 
-strucutred_table = mn.init_structured_table()
+strucutred_table = sp.init_structured_table()
 
 def print_separator():
     print("="*40)
