@@ -5,10 +5,10 @@ import io
 url = (
     "https://docs.google.com/spreadsheets/d/"
     "1W9qMX1QzlZvBkNS0lwA7ZKyMGUlR9dBZnAE9JwqHRHg/export"
-    "?format=csv&gid=917584427"
+    "?format=csv&gid=917584427" # постояное расписание
 )
 
-def init_table():
+def init_table(url=url):
     response = requests.get(url)
     response.raise_for_status()
 
@@ -48,8 +48,8 @@ def get_classes_indexes(table):
 
     return classes_indexes
 
-def init_structured_table():
-    table = init_table()
+def init_structured_table(url=url):
+    table = init_table(url=url)
     days_of_week_indexes = get_days_of_week_indexes(table)
     classes_indexes = get_classes_indexes(table)
     strucutred_table = []

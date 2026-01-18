@@ -31,5 +31,3 @@
 > strucutred_table = init_structured_table()
 > print(strucutred_table[3][1][4][0]) # выведет пятый урок первой подгруппы 6С в четверг
 > ```
-
-
