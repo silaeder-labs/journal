@@ -43,20 +43,43 @@ def get_classes_indexes(table, classes):
 
     return classes_indexes
 
+def get_basic_length(indexes):
+    counter = 0
+    indexes_len = len(indexes) - 1
+
+    for i in range(indexes_len):
+        counter += abs(indexes[i] - indexes[i+1])
+    counter //= indexes_len
+
+    return counter 
+
 def init_structured_table(url, days_of_week=days_of_week, classes=classes): # можно ставить кастомные дни недели и классы
     table = init_table(url=url)
     days_of_week_indexes = get_days_of_week_indexes(table, days_of_week)
     classes_indexes = get_classes_indexes(table, classes)
     strucutred_table = []
+    day_basic_length = get_basic_length(days_of_week_indexes)
+    class_basic_length = get_basic_length(classes_indexes)
 
-    for i in range(len(days_of_week_indexes)-1):
+    for i in range(len(days_of_week_indexes)):
         strucutred_table.append([])
-        for j in range(len(classes_indexes)-1):
+        for j in range(len(classes_indexes)):
             strucutred_table[i].append([])
-            for row in table[days_of_week_indexes[i]:days_of_week_indexes[i+1]]:
-                strucutred_table[i][j].append(row[classes_indexes[j]:classes_indexes[j+1]])
+            if(i < len(days_of_week_indexes)-1):
+                for row in table[days_of_week_indexes[i]:days_of_week_indexes[i+1]]:
+                    if(j < len(classes_indexes)-1):
+                        strucutred_table[i][j].append(row[classes_indexes[j]:classes_indexes[j+1]])
+                    else:
+                        strucutred_table[i][j].append(row[classes_indexes[j]:classes_indexes[j]+class_basic_length])
+            else:
+                for row in table[days_of_week_indexes[i]:days_of_week_indexes[i]+day_basic_length]:
+                    if(j < len(classes_indexes)-1):
+                        strucutred_table[i][j].append(row[classes_indexes[j]:classes_indexes[j+1]])
+                    else:
+                        strucutred_table[i][j].append(row[classes_indexes[j]:classes_indexes[j]+class_basic_length])
 
     return strucutred_table
 
 if __name__ == "__main__":
     print(init_table())
+    # get_basic_length
