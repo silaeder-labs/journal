@@ -16,7 +16,7 @@
 
 > [!NOTE]
 > ```python
-> strucutred_table = init_structured_table()
+> strucutred_table = init_structured_table(url)
 > print(strucutred_table[4]) # выведет расписание пятницы
 > ```
 > ```python
@@ -30,4 +30,20 @@
 > ```python
 > strucutred_table = init_structured_table()
 > print(strucutred_table[3][1][4][0]) # выведет пятый урок первой подгруппы 6С в четверг
+> ```
+
+<h3>Как изменить таблицу и лист с которых библиотека получает информацию?</h3>
+
+источники нужно указать при вызове функции `init_structured_table()`
+
+> [!NOTE]
+> ```
+> import schedule_parser as sp
+> url = (
+>     "https://docs.google.com/spreadsheets/d/" # гугл таблицы
+>     "1W9qMX1QzlZvBkNS0lwA7ZKyMGUlR9dBZnAE9JwqHRHg/export" # id таблицы
+>     "?format=csv&gid=917584427" # id страницы
+> )
+> 
+> strucutred_table = sp.init_structured_table(url=url)
 > ```
