@@ -18,16 +18,13 @@
 > ```python
 > strucutred_table = init_structured_table(url)
 > print(strucutred_table[4]) # выведет расписание пятницы
-> ```
-> ```python
+>
 > strucutred_table = init_structured_table()
 > print(strucutred_table[0][4]) # выведет расписание 9С в понедельник
-> ```
-> ```python
+>
 > strucutred_table = init_structured_table()
 > print(strucutred_table[2][4][3]) # выведет четвертый урок обоих подгрупп 9С в среду
-> ```
-> ```python
+>
 > strucutred_table = init_structured_table()
 > print(strucutred_table[3][1][4][0]) # выведет пятый урок первой подгруппы 6С в четверг
 > ```
@@ -37,7 +34,7 @@
 источники нужно указать при вызове функции `init_structured_table()`
 
 > [!NOTE]
-> ```
+> ```python
 > import schedule_parser as sp
 > url = (
 >     "https://docs.google.com/spreadsheets/d/" # гугл таблицы
@@ -53,7 +50,7 @@
 классы и дни недели можно передать в функцию `init_structured_table()`
 
 > [!NOTE]
-> ```
+> ```python
 > import schedule_parser as sp
 > url = (
 >     "https://docs.google.com/spreadsheets/d/" # гугл таблицы
