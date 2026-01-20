@@ -140,9 +140,9 @@ def init_dictionary(days_of_week, classes, lessons):
 
 
 if __name__ == "__main__":
-    table = init_table(url)
-    days_of_week = get_days_of_week(table, days_of_week_start_marker, days_of_week_stop_marker)
-    classes = get_classes(table, classes_start_marker, classes_stop_marker)
+    table = init_table(URL)
+    days_of_week = get_days_of_week(table, DAYS_OF_WEEK_START_MARKER, DAYS_OF_WEEK_STOP_MARKER)
+    classes = get_classes(table, CLASSES_START_MARKER, CLASSES_STOP_MARKER)
     lessons = get_lessons_of_day(table,days_of_week[1],classes[1])
 
     convert_to_json(init_dictionary(days_of_week, classes, lessons))
