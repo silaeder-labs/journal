@@ -5,6 +5,6 @@ url = (
 )
 
 classes_start_marker = "5С"
-classes_stop_marker = "11С"
+classes_stop_marker = "Питание в столовой"
 days_of_week_start_marker = "Понедельник"
-days_of_week_stop_marker = "Cуббота"
+days_of_week_stop_marker = "Суббота" #маркер после последнего дня

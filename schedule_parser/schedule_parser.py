@@ -54,10 +54,10 @@ def get_classes(table, classes_start_marker, classes_stop_marker):
                 isReading = True
         else:
             if(word != ''):
-                classes.append(word)
                 classes_indexes.append(i)
                 if(word.lower() == classes_stop_marker.lower()):
                     break
+                classes.append(word)
 
     return classes, classes_indexes
 
@@ -85,19 +85,13 @@ def get_lessons_of_day(table, day_of_week_indexes, classes_indexes):
             lessons_start_time[i].append(start_time)
             lessons_end_time[i].append(end_time)
 
-        for j in range(len(classes_indexes)):
+        for j in range(len(classes_indexes)-1):
             lessons[i].append([])
             for v in range(len(lessons_indexes[i])):
                 groups = []
                 lesson_row = day_of_week_indexes[i] + v + 1
-
-                if(j < len(classes_indexes)-1):
-                    for u in range(classes_indexes[j], classes_indexes[j+1]):
-                        if u < len(table[lesson_row]):
-                            groups.append(table[lesson_row][u])
-                else:
-                    for u in range(classes_indexes[j], classes_indexes[j]+2):
-                        groups.append(table[lesson_row][u])
+                for u in range(classes_indexes[j], classes_indexes[j+1]):
+                    groups.append(table[lesson_row][u])
 
                 lessons[i][j].append(groups)
 
@@ -125,7 +119,7 @@ def init_dictionary(days_of_week, classes, lessons):
                     group = {}
 
                     lesson_name = str(lessons[0][x1][x2][x3][x4])
-                    lesson_cab = lesson_name[len(lesson_name)-3:]
+                    lesson_cab = (lesson_name.replace(" ","")[len(lesson_name.replace(" ",""))-3:])
                     lesson_name = lesson_name[:len(lesson_name)-3]
 
                     group["name"] = lesson_name
@@ -154,5 +148,6 @@ if __name__ == "__main__":
     days_of_week = get_days_of_week(table, days_of_week_start_marker, days_of_week_stop_marker)
     classes = get_classes(table, classes_start_marker, classes_stop_marker)
     lessons = get_lessons_of_day(table,days_of_week[1],classes[1])
+    print(classes)
 
     convert_to_json(init_dictionary(days_of_week, classes, lessons))
