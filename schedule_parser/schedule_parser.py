@@ -96,9 +96,8 @@ def get_lessons_of_day(table, day_of_week_indexes, classes_indexes):
                         if u < len(table[lesson_row]):
                             groups.append(table[lesson_row][u])
                 else:
-                    for u in range(classes_indexes[j], len(table[lesson_row])):
-                        if table[lesson_row][u].strip():
-                            groups.append(table[lesson_row][u])
+                    for u in range(classes_indexes[j], classes_indexes[j]+2):
+                        groups.append(table[lesson_row][u])
 
                 lessons[i][j].append(groups)
 
