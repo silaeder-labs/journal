@@ -4,7 +4,7 @@ url = (
     "?format=csv&gid=917584427" # id страницы
 )
 
-classes_start_marker = "5С"
-classes_stop_marker = "Питание в столовой"
-days_of_week_start_marker = "Понедельник"
-days_of_week_stop_marker = "Суббота" #маркер после последнего дня
+classes_start_marker = "5С" #маркер первого класса в таблице
+classes_stop_marker = "Питание в столовой" #маркер после последнего класса в таблице
+days_of_week_start_marker = "Понедельник" #маркер первого дня
+days_of_week_stop_marker = "Суббота" #маркер последнего дня

@@ -3,60 +3,38 @@
 
 ---
 
-<h2 id="possibilities">Возможности</h2>
+<h2 id="possibilities">Как получить данные</h2>
 
-в парсере есть функция `init_structured_table()` которая возвращает готовую таблицу расписания
-
-<h3>Как получить нужную информацию?</h3>
-
-1. укажите день недели (0-5)
-2. укажите класс (0-7)
-4. укажите номер урока (0-11)
-3. укажите подкласс (0-1) 
-
+1. Настройте пермеменные
 > [!NOTE]
+> В файле config.py
 > ```python
-> strucutred_table = init_structured_table(url)
-> print(strucutred_table[4]) # выведет расписание пятницы
->
-> strucutred_table = init_structured_table()
-> print(strucutred_table[0][4]) # выведет расписание 9С в понедельник
->
-> strucutred_table = init_structured_table()
-> print(strucutred_table[2][4][3]) # выведет четвертый урок обоих подгрупп 9С в среду
->
-> strucutred_table = init_structured_table()
-> print(strucutred_table[3][1][4][0]) # выведет пятый урок первой подгруппы 6С в четверг
-> ```
-
-<h3>Как изменить таблицу и лист с которых библиотека получает информацию?</h3>
-
-источники нужно указать при вызове функции `init_structured_table()`
-
-> [!NOTE]
-> ```python
-> import schedule_parser as sp
 > url = (
 >     "https://docs.google.com/spreadsheets/d/" # гугл таблицы
 >     "1W9qMX1QzlZvBkNS0lwA7ZKyMGUlR9dBZnAE9JwqHRHg/export" # id таблицы
 >     "?format=csv&gid=917584427" # id страницы
 > )
 > 
-> strucutred_table = sp.init_structured_table(url=url)
+> classes_start_marker = "5С" #маркер первого класса в таблице
+> classes_stop_marker = "Питание в столовой" #маркер после последнего класса в таблице
+> days_of_week_start_marker = "Понедельник" #маркер первого дня
+> days_of_week_stop_marker = "Суббота" #маркер последнего дня
 > ```
 
-<h3>Как использовать кастомные классы и дни недели</h3>
-
-классы и дни недели можно передать в функцию `init_structured_table()`
-
+2. Импортируйте библиотеку и данные из конфига
 > [!NOTE]
+> в вашем файле
 > ```python
 > import schedule_parser as sp
-> from cofig.py import *
->
-> days_of_week = ["понедельник", "вторник", "среда", "четверг", "пятница", "суббота"]
-> classes = ["5С", "6С", "7С", "8С", "9С", "10С", "10Т", "11С"]
+> from config import *
 > 
-> strucutred_table = sp.init_structured_table(url=url, days_of_week=days_of_week, classes=classes)
+> 
+> table = sp.init_table(url)
+> days_of_week = sp.get_days_of_week(table, days_of_week_start_marker, days_of_week_stop_marker)
+> classes = sp.get_classes(table, classes_start_marker, classes_stop_marker)
+> lessons = sp.get_lessons_of_day(table,days_of_week[1],classes[1])
+> 
+> sp.convert_to_json(sp.init_dictionary(days_of_week, classes, lessons))
 > ```
 
+на выходе будет .json файл с расписанием из указаной таблицы

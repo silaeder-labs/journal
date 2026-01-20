@@ -1,15 +1,10 @@
 import schedule_parser as sp
 from config import *
 
-strucutred_table = sp.init_structured_table(url=url)
 
-def print_separator():
-    print("="*40)
+table = sp.init_table(url)
+days_of_week = sp.get_days_of_week(table, days_of_week_start_marker, days_of_week_stop_marker)
+classes = sp.get_classes(table, classes_start_marker, classes_stop_marker)
+lessons = sp.get_lessons_of_day(table,days_of_week[1],classes[1])
 
-print(strucutred_table[4]) # выведет расписание пятницы
-print_separator()
-print(strucutred_table[0][4]) # выведет расписание 9С в понедельник
-print_separator()
-print(strucutred_table[2][4][3]) # выведет четвертый урок обоих подгрупп 9С в среду
-print_separator()
-print(strucutred_table[3][1][4][0]) # выведет пятый урок первой подгруппы 6С в четверг
+sp.convert_to_json(sp.init_dictionary(days_of_week, classes, lessons))

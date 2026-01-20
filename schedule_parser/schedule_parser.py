@@ -136,19 +136,13 @@ def init_dictionary(days_of_week, classes, lessons):
 
         dict[days_of_week[0][x1]] = day_dict
 
-    return dict
-    
+    return dict    
 
 
 if __name__ == "__main__":
-    # data_list = [
-    #     {"monday": {"9C": {"1": {"from": "1678886400", "to":"1678886400"}, "lesson": {"group1": {"name": "sleep", "cab":209}}}}},
-    # ]
-    # convert_to_json(init_dictionary(days_of_week,classes))
     table = init_table(url)
     days_of_week = get_days_of_week(table, days_of_week_start_marker, days_of_week_stop_marker)
     classes = get_classes(table, classes_start_marker, classes_stop_marker)
     lessons = get_lessons_of_day(table,days_of_week[1],classes[1])
-    print(classes)
 
     convert_to_json(init_dictionary(days_of_week, classes, lessons))
