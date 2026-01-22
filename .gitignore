@@ -16,3 +16,4 @@
 **/archive
 *.json
 *.env
+/experements
