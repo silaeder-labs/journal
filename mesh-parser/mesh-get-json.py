@@ -1,9 +1,10 @@
 from playwright.sync_api import sync_playwright
 import json
 from pathlib import Path
+import config
 
-lessons_id = [33623636, 33623620, 37175860, 33623623, 33623645, 33623617, 33623590, 33623577, 33623648, 33623651, 33623650, 33623605, 33623584, 33623580]
-lessons_name = ['biology', 'geography', 'english', 'informatics', 'history', 'literature', 'russian', 'chemistry', 'algebra', 'statistics', 'geometry', 'social-science', 'physics', 'pe']
+lessons_id = config.LESSONS_ID
+lessons_name = config.LESSONS_NAME
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True)
