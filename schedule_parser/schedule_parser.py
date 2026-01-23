@@ -102,7 +102,7 @@ def convert_to_json(table):
     script_path = Path(__file__).resolve()
     script_dir = script_path.parent
 
-    final_path = script_dir / "data.json"
+    final_path = script_dir / "data/data.json"
     with open(final_path, 'w', encoding='utf-8') as f:
         json.dump(table, f, ensure_ascii=False, indent=2)
 
