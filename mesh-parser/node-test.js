@@ -1,3 +1,7 @@
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+
+const authorization_token = process.env.BEARER_TOKEN;
 const fs = require('fs');
 const URL_BASE = "https://school.mos.ru/api/ej/rating/v1/rank/class?personId=5e6f08de-bea8-40ef-97f1-9da1e806236f";
 const subject_ids = [33623636, 33623620, 37175860, 33623623, 33623645, 33623617, 33623590, 33623577, 33623648, 33623651, 33623650, 33623605, 33623584, 33623580];
@@ -24,7 +28,7 @@ async function getRank(url) {
         const response = await fetch(url, {
             method: "GET",
             headers: {
-                
+                "Authorization": `Bearer ${authorization_token}`,
                 "profile-id": "31835076",
                 "profile-type": "student",
                 "x-mes-subsystem": "familyweb",

@@ -17,3 +17,5 @@
 *.json
 *.env
 /experements
+
+**/node_modules/
