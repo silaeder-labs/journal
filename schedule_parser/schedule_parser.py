@@ -2,6 +2,7 @@ import requests
 import csv
 import io
 import json
+from pathlib import Path
 from config import *
 
 def init_table(url):
@@ -98,8 +99,11 @@ def get_lessons_of_day(table, day_of_week_indexes, classes_indexes):
     return lessons, lessons_start_time, lessons_end_time, lessons_indexes
 
 def convert_to_json(table):
-    file_name = "data.json"
-    with open(file_name, 'w', encoding='utf-8') as f:
+    script_path = Path(__file__).resolve()
+    script_dir = script_path.parent
+
+    final_path = script_dir / "data.json"
+    with open(final_path, 'w', encoding='utf-8') as f:
         json.dump(table, f, ensure_ascii=False, indent=2)
 
 def init_dictionary(days_of_week, classes, lessons):
