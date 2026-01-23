@@ -1,12 +1,14 @@
 const path = require('path');
+const fs = require('fs');
+
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const authorization_token = process.env.BEARER_TOKEN;
-const fs = require('fs');
 const URL_BASE = "https://school.mos.ru/api/ej/rating/v1/rank/class?personId=5e6f08de-bea8-40ef-97f1-9da1e806236f";
 const subject_ids = [33623636, 33623620, 37175860, 33623623, 33623645, 33623617, 33623590, 33623577, 33623648, 33623651, 33623650, 33623605, 33623584, 33623580];
 const subject_names = ['biology', 'geography', 'english', 'informatics', 'history', 'literature', 'russian', 'chemistry', 'algebra', 'statistics', 'geometry', 'social-science', 'physics', 'pe'];
 
+const jsonFilePath = path.join(__dirname, 'data.json');
 // const subject_ids = [33623636];
 // const subject_names = ['biology'];
 
@@ -80,7 +82,7 @@ async function main() {
 
     // Сохраняем только ПОСЛЕ того, как все циклы завершены
     const jsonString = JSON.stringify(final_marks, null, 2);
-    fs.writeFileSync('marks.json', jsonString, 'utf8');
+    fs.writeFileSync(jsonFilePath, jsonString, 'utf8');
     console.log("completed");
 }
 
