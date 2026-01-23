@@ -4,13 +4,13 @@ const fs = require('fs');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const authorization_token = process.env.BEARER_TOKEN;
-const URL_BASE = "https://school.mos.ru/api/ej/rating/v1/rank/class?personId=5e6f08de-bea8-40ef-97f1-9da1e806236f";
-const subject_ids = [33623636, 33623620, 37175860, 33623623, 33623645, 33623617, 33623590, 33623577, 33623648, 33623651, 33623650, 33623605, 33623584, 33623580];
-const subject_names = ['biology', 'geography', 'english', 'informatics', 'history', 'literature', 'russian', 'chemistry', 'algebra', 'statistics', 'geometry', 'social-science', 'physics', 'pe'];
+const subject_names = process.env.SUBJECT_NAMES.split(',');
+const subject_ids = process.env.SUBJECT_IDS.split(',');
+const person_id = process.env.PERSON_ID;
+const profiel_id = process.env.PROFILE_ID
+const URL_BASE = "https://school.mos.ru/api/ej/rating/v1/rank/class";
 
 const jsonFilePath = path.join(__dirname, 'data/data.json');
-// const subject_ids = [33623636];
-// const subject_names = ['biology'];
 
 function addDay(dateStr) {
     const [year, month, day] = dateStr.split('-').map(Number);
@@ -31,7 +31,7 @@ async function getRank(url) {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${authorization_token}`,
-                "profile-id": "31835076",
+                "profile-id": profiel_id,
                 "profile-type": "student",
                 "x-mes-subsystem": "familyweb",
                 "accept": "application/json"
@@ -53,7 +53,7 @@ async function get_days_marks(curr_day, subject_id, n) {
     const tasks = [];
     for (let j = 0; j <= n; j++) {
         const day = curr_day;
-        const curr_url = `${URL_BASE}&subjectId=${subject_id}&date=${day}`;
+        const curr_url = `${URL_BASE}?personId=${person_id}&subjectId=${subject_id}&date=${day}`;
         const task = getRank(curr_url).then(marks => {
             overall_marks[day] = marks;
         });
@@ -80,7 +80,6 @@ async function main() {
         final_marks[subject_names[v]] = sortedMarks;
     }
 
-    // Сохраняем только ПОСЛЕ того, как все циклы завершены
     const jsonString = JSON.stringify(final_marks, null, 2);
     fs.writeFileSync(jsonFilePath, jsonString, 'utf8');
     console.log("completed");
