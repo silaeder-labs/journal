@@ -7,7 +7,7 @@
 
 1. Настройте пермеменные в `.env`
 пример конфига
-```python
+```
 #  гугл таблицы, id таблицы, id страницы
 URL = https://docs.google.com/spreadsheets/d/1W9qMX1QzlZvBkNS0lwA7ZKyMGUlR9dBZnAE9JwqHRHg/export?format=csv&gid=917584427
 
