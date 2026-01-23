@@ -7,7 +7,6 @@ const authorization_token = process.env.BEARER_TOKEN;
 const subject_names = process.env.SUBJECT_NAMES.split(',');
 const subject_ids = process.env.SUBJECT_IDS.split(',');
 const person_id = process.env.PERSON_ID;
-const profiel_id = process.env.PROFILE_ID
 const URL_BASE = "https://school.mos.ru/api/ej/rating/v1/rank/class";
 
 const jsonFilePath = path.join(__dirname, 'data/data.json');
@@ -31,7 +30,6 @@ async function getRank(url) {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${authorization_token}`,
-                "profile-id": profiel_id,
                 "profile-type": "student",
                 "x-mes-subsystem": "familyweb",
                 "accept": "application/json"
