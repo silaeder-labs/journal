@@ -3,6 +3,8 @@ const fs = require('fs');
 
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
+const today = new Date().toISOString().split('T')[0];
+
 const authorization_token = process.env.BEARER_TOKEN;
 const subject_names = process.env.SUBJECT_NAMES.split(',');
 const subject_ids = process.env.SUBJECT_IDS.split(',');
@@ -11,16 +13,10 @@ const URL_BASE = "https://school.mos.ru/api/ej/rating/v1/rank/class";
 
 const jsonFilePath = path.join(__dirname, 'data/data.json');
 
-function addDay(dateStr) {
-    const [year, month, day] = dateStr.split('-').map(Number);
-    const date = new Date(year, month - 1, day);
-    date.setDate(date.getDate() + 1);
-    
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const dd = String(date.getDate()).padStart(2, '0');
-    
-    return `${yyyy}-${mm}-${dd}`;
+function addDays(dateString, days) {
+  const date = new Date(dateString);
+  date.setDate(date.getDate() + days);
+  return date.toISOString().split('T')[0];
 }
 
 async function getRank(url) {
@@ -54,7 +50,7 @@ async function get_days_marks(curr_day, subject_id, n) {
             overall_marks[day] = marks;
         });
         tasks.push(task);
-        curr_day = addDay(curr_day);
+        curr_day = addDays(curr_day, 1);
     }
     await Promise.all(tasks);
     return overall_marks;
@@ -62,10 +58,11 @@ async function get_days_marks(curr_day, subject_id, n) {
 
 async function main() {
     const final_marks = {};
+    console.log(today)
 
     for (let v = 0; v < subject_ids.length; v++) {
         console.log(`working on: ${subject_names[v]}...`);
-        const marks_final = await get_days_marks("2025-12-01", subject_ids[v].toString(), 55);
+        const marks_final = await get_days_marks(addDays(today, -36), subject_ids[v].toString(), 36);
         
         const sortedDates = Object.keys(marks_final).sort((a, b) => new Date(a) - new Date(b));
         const sortedMarks = {};
