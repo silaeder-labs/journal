@@ -1,10 +1,21 @@
+const { getSessions } = require('../ids/id_parser.js');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const authorization_token = process.env.BEARER_TOKEN;
 
 const getSubjectIdsAndMarks = async () => {
-  const url = "https://school.mos.ru/api/family/web/v1/subject_marks?student_id=31835076";
+  let profile_id = null;
+
+  const result2 = await getSessions();
+  if(result2 && result2.profile_id) {
+      profile_id = result2.profile_id;
+  } else {
+      console.error("Не удалось получить profile_id из сессии");
+      return;
+  }
+
+  const url = `https://school.mos.ru/api/family/web/v1/subject_marks?student_id=${profile_id}`;
 
   let subjects_names = [];
   let subject_ids = [];
