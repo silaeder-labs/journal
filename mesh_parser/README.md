@@ -10,9 +10,6 @@
 напишите в него значение вашего токена
 ```
 BEARER_TOKEN=<ваш токен>
-SUBJECT_NAMES=<названия предметовы>
-SUBJECT_IDS=<id предметов>
-PERSON_ID=<ваш id>
 ```
 
 2. клонирование и запуск логина
@@ -20,6 +17,6 @@ PERSON_ID=<ваш id>
 git clone https://github.com/silaeder-labs/journal #клонирование репозитория
 cd journal #переход в папку
 npm install dotenv # установка библиотек
-node mesh_parser/mesh-parser.js
+node mesh_parser/students_average_marks/mesh-parser.js
 ```
-после завершения программы `.json` файлы будут в папке `/mesh_parser/data`
+после завершения программы `.json` файлы будут в папке `/mesh_parser/students_average_marks/data`
