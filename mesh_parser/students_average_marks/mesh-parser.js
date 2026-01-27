@@ -65,7 +65,7 @@ async function main() {
 
     for (let v = 0; v < subject_ids.length; v++) {
         console.log(`working on: ${subject_names[v]}...`);
-        const marks_final = await get_days_marks("2025-12-01", subject_ids[v].toString(), 54);
+        const marks_final = await get_days_marks("2025-12-01", subject_ids[v].toString(), 55);
         
         const sortedDates = Object.keys(marks_final).sort((a, b) => new Date(a) - new Date(b));
         const sortedMarks = {};
