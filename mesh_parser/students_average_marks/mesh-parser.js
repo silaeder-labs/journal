@@ -1,4 +1,5 @@
 const { getSubjectIdsAndMarks } = require('../subjects/subjects_parser.js');
+const { getSessions } = require('../ids/id_parser.js');
 
 const path = require('path');
 const fs = require('fs');
@@ -8,7 +9,6 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const today = new Date().toISOString().split('T')[0];
 
 const authorization_token = process.env.BEARER_TOKEN;
-const person_id = process.env.PERSON_ID;
 const URL_BASE = "https://school.mos.ru/api/ej/rating/v1/rank/class";
 
 const jsonFilePath = path.join(__dirname, 'data/data.json');
@@ -61,6 +61,11 @@ async function main() {
     if (result) {
         subject_ids = result.subject_ids;
         subject_names = result.subjects_names;
+    }
+
+    const result2 = await getSessions();
+    if(result2) {
+        person_id = result2.person_id;
     }
 
     const final_marks = {};
