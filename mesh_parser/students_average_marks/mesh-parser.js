@@ -1,13 +1,13 @@
+const { getSubjectIdsAndMarks } = require('../subjects/subjects_parser.js');
+
 const path = require('path');
 const fs = require('fs');
 
-require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const today = new Date().toISOString().split('T')[0];
 
 const authorization_token = process.env.BEARER_TOKEN;
-const subject_names = process.env.SUBJECT_NAMES.split(',');
-const subject_ids = process.env.SUBJECT_IDS.split(',');
 const person_id = process.env.PERSON_ID;
 const URL_BASE = "https://school.mos.ru/api/ej/rating/v1/rank/class";
 
@@ -57,8 +57,13 @@ async function get_days_marks(curr_day, subject_id, n) {
 }
 
 async function main() {
+    const result = await getSubjectIdsAndMarks();
+    if (result) {
+        subject_ids = result.subject_ids;
+        subject_names = result.subjects_names;
+    }
+
     const final_marks = {};
-    console.log(today)
 
     for (let v = 0; v < subject_ids.length; v++) {
         console.log(`working on: ${subject_names[v]}...`);
