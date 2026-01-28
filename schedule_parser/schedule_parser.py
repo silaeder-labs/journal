@@ -7,9 +7,6 @@ from pathlib import Path
 from config import *
 
 def extract_lesson_and_cabinet(lesson_text):
-    """
-    Извлекает название урока и номер кабинета из текста
-    """
     lesson_text = lesson_text.strip()
     if not lesson_text:
         return "", ""
