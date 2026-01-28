@@ -253,11 +253,9 @@ if __name__ == "__main__":
     
     lessons = get_lessons_of_day(table, days_of_week[1], classes[1])
     
-    debug_lessons_structure(lessons, 0, 0)
+    # debug_lessons_structure(lessons, 0, 0)
     
     schedule_dict = init_dictionary(days_of_week, classes, lessons)
-    
-    print_schedule_summary(schedule_dict, "Понедельник", "5С")
     
     convert_to_json(schedule_dict)
     

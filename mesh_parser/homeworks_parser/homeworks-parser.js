@@ -1,8 +1,13 @@
 const { getSessions } = require('../ids/id_parser.js');
+
 const path = require('path');
+const fs = require('fs');
+
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const authorization_token = process.env.BEARER_TOKEN;
+
+const jsonFilePath = path.join(__dirname, 'data/data.json');
 
 async function getHomework(from_date, to_date) {
     let profile_id = null;
@@ -38,10 +43,25 @@ async function getHomework(from_date, to_date) {
             throw new Error(`Ошибка: ${response.status}`);
         }
 
+        let result = {}
+
         const data = await response.json();
-        console.log(data);
-        return data;
-        
+
+        for (let i = 0; i < data["payload"].length; i++) {
+            let cur_res = {}
+            cur_res["type"] = data["payload"][i]["type"]; //type
+            cur_res["description"] = data["payload"][i]["description"]; //description
+            cur_res["homework"] = data["payload"][i]["homework"]; //homework
+            cur_res["subject_id"] = data["payload"][i]["subject_id"]; //subject id
+            cur_res["subject_name"] = data["payload"][i]["subject_name"]; //subject name
+            cur_res["date_prepared_for"] = data["payload"][i]["date_prepared_for"]; //date prepared for
+
+            result[i] = cur_res;
+        }
+
+        const jsonString = JSON.stringify(result, null, 2);
+        fs.writeFileSync(jsonFilePath, jsonString, 'utf8');        
+        console.log("completed");
     } catch (error) {
         console.error("Произошла ошибка при запросе:", error.message);
     }
