@@ -30,8 +30,14 @@ node mesh_parser/students_average_marks/mesh-parser.js
 
 <h3 id="homework-parsing-quick-start">Как запустить?</h3>
 
-```bash 
-node mesh_parser/homeworks_parser/homeworks-parser.js #запуса парсера
+1. добавьте токен в окружение
+
+2. импортируйте функцию getHomeWork скрипт homeworks-parser
+```javascript
+const { getHomework } = require(<PATH>);
 ```
 
-после завершения программы `.json` файлы будут в папке `/mesh_parser/homeworks_parser/data`
+3. вызовите функцию указав аргуметы
+```javascript
+getHomework('2026-01-28', '2026-01-28', false); //1-стартовая дата, 2-конечная дата, 3-сохранять ли в json
+```

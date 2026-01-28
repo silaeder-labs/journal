@@ -9,7 +9,7 @@ const authorization_token = process.env.BEARER_TOKEN;
 
 const jsonFilePath = path.join(__dirname, 'data/data.json');
 
-async function getHomework(from_date, to_date) {
+async function getHomework(from_date, to_date, save_to_json=false) {
     let profile_id = null;
 
     const result2 = await getSessions();
@@ -59,9 +59,13 @@ async function getHomework(from_date, to_date) {
             result[i] = cur_res;
         }
 
-        const jsonString = JSON.stringify(result, null, 2);
-        fs.writeFileSync(jsonFilePath, jsonString, 'utf8');        
+        if(save_to_json) {
+            const jsonString = JSON.stringify(result, null, 2);
+            fs.writeFileSync(jsonFilePath, jsonString, 'utf8');    
+        }    
+
         console.log("completed");
+        return result;
     } catch (error) {
         console.error("Произошла ошибка при запросе:", error.message);
     }
@@ -70,4 +74,4 @@ async function getHomework(from_date, to_date) {
 
 module.exports = { getHomework };
 
-// getHomework('2026-01-28', '2026-01-28'); //example
+// getHomework('2026-01-28', '2026-01-28', false); //example
