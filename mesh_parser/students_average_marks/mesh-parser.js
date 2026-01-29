@@ -1,4 +1,4 @@
-const { getSubjectIdsAndMarks } = require('../subjects/subjects_parser.js');
+const { getSubjectIdsAndNames } = require('../subjects/subjects_parser.js');
 const { getSessions } = require('../ids/id_parser.js');
 
 const path = require('path');
@@ -56,23 +56,23 @@ async function get_days_marks(curr_day, subject_id, n) {
     return overall_marks;
 }
 
-async function main() {
-    const result = await getSubjectIdsAndMarks();
-    if (result) {
-        subject_ids = result.subject_ids;
-        subject_names = result.subjects_names;
+async function getAllMakrs(curr_day, count) {
+    const ids = await getSubjectIdsAndNames();
+    if (ids) {
+        subject_ids = ids.subject_ids;
+        subject_names = ids.subjects_names;
     }
 
-    const result2 = await getSessions();
-    if(result2) {
-        person_id = result2.person_id;
+    const session = await getSessions();
+    if(session) {
+        person_id = session.person_id;
     }
 
     const final_marks = {};
 
     for (let v = 0; v < subject_ids.length; v++) {
         console.log(`working on: ${subject_names[v]}...`);
-        const marks_final = await get_days_marks(addDays(today, -36), subject_ids[v].toString(), 36);
+        const marks_final = await get_days_marks(addDays(curr_day, -count), subject_ids[v].toString(), count);
         
         const sortedDates = Object.keys(marks_final).sort((a, b) => new Date(a) - new Date(b));
         const sortedMarks = {};
@@ -82,10 +82,27 @@ async function main() {
         
         final_marks[subject_names[v]] = sortedMarks;
     }
-
-    const jsonString = JSON.stringify(final_marks, null, 2);
-    fs.writeFileSync(jsonFilePath, jsonString, 'utf8');
     console.log("completed");
+    return final_marks;
 }
 
-main();
+async function saveToJson(dict) {
+    const jsonString = JSON.stringify(dict, null, 2);
+    fs.writeFileSync(jsonFilePath, jsonString, 'utf8');
+}
+
+async function run() {
+    const dicttest = await getAllMakrs(today, 36);
+    if (dicttest) {
+        await saveToJson(dicttest);
+        console.log("data saved");
+    }
+}
+
+//check if file is running directly
+if (require.main === module) {
+    run();
+}
+
+
+module.exports = { getAllMakrs, saveToJson };
