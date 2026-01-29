@@ -1,5 +1,5 @@
-# Парсер плюсника математики
-> программа которая позволяет парсить дз
+# Парсер плюсника информатики
+> программа которая позволяет парсить оценки учеников
 
 ---
 
@@ -9,7 +9,7 @@
 git clone https://github.com/silaeder-labs/journal #клонирование репозитория
 cd journal #переход в проект
 #настройка URL таблицы в .env файле в папке math_plusnik_homework_parser
-python math_table_parser/example.py
+python info_table_parser/example.py
 ```
 
 также его можно импоритровать и использовать функции отдельно
