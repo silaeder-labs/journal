@@ -1,4 +1,4 @@
-const { getSubjectIdsAndMarks } = require('../subjects/subjects_parser.js');
+const { getSubjectIdsAndNames } = require('../subjects/subjects_parser.js');
 const { getSessions } = require('../ids/id_parser.js');
 
 const path = require('path');
@@ -56,8 +56,8 @@ async function get_days_marks(curr_day, subject_id, n) {
     return overall_marks;
 }
 
-async function main() {
-    const ids = await getSubjectIdsAndMarks();
+async function getAllMakrs(curr_day, count) {
+    const ids = await getSubjectIdsAndNames();
     if (ids) {
         subject_ids = ids.subject_ids;
         subject_names = ids.subjects_names;
@@ -72,7 +72,7 @@ async function main() {
 
     for (let v = 0; v < subject_ids.length; v++) {
         console.log(`working on: ${subject_names[v]}...`);
-        const marks_final = await get_days_marks(addDays(today, -36), subject_ids[v].toString(), 36);
+        const marks_final = await get_days_marks(addDays(curr_day, -count), subject_ids[v].toString(), count);
         
         const sortedDates = Object.keys(marks_final).sort((a, b) => new Date(a) - new Date(b));
         const sortedMarks = {};
@@ -92,7 +92,7 @@ async function saveToJson(dict) {
 }
 
 async function run() {
-    const dicttest = await main();
+    const dicttest = await getAllMakrs(today, 36);
     if (dicttest) {
         await saveToJson(dicttest);
         console.log("data saved");
@@ -105,4 +105,4 @@ if (require.main === module) {
 }
 
 
-module.exports = { main, saveToJson };
+module.exports = { getAllMakrs, saveToJson };

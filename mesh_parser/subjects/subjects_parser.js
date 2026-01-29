@@ -4,12 +4,12 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const authorization_token = process.env.BEARER_TOKEN;
 
-const getSubjectIdsAndMarks = async () => {
+const getSubjectIdsAndNames = async () => {
   let profile_id = null;
 
-  const result2 = await getSessions();
-  if(result2 && result2.profile_id) {
-      profile_id = result2.profile_id;
+  const session = await getSessions();
+  if(session && session.profile_id) {
+      profile_id = session.profile_id;
   } else {
       console.error("Не удалось получить profile_id из сессии");
       return;
@@ -46,4 +46,4 @@ const getSubjectIdsAndMarks = async () => {
   }
 };
 
-module.exports = { getSubjectIdsAndMarks };
+module.exports = { getSubjectIdsAndNames };
