@@ -32,3 +32,22 @@ def get_columns_indexes(table: list[list[str]]) -> tuple[int ,list[int]]:
             marks_indexes.append(i)
 
     return surname_index, marks_indexes
+
+def convert_to_dictionary(table: list[list[str]], surname_index: int, marks_indexes: list[int]) -> dict[str, list[int]]:
+    marks = {}
+    #парсим фамилии
+    for i in range(1,len(table)):
+        surname = table[i][surname_index]
+        if(surname != ""):
+            students_marks = []
+
+            for mark_index in marks_indexes:
+                val = table[i][mark_index]
+                mark = int(val) if val.isdigit() else 0
+                if(mark != ""):
+                    students_marks.append(mark)
+
+            marks[surname] = students_marks
+
+    return marks
+
