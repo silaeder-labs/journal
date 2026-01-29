@@ -3,9 +3,8 @@ import csv
 import io
 import json
 from pathlib import Path
-from config import URL
 
-def init_table(url):
+def init_table(url: str) -> list[list[str]]:
     response = requests.get(url)
     response.raise_for_status()
 
@@ -18,8 +17,8 @@ def init_table(url):
 
     return table
 
-def convert_to_dictionary(table):
-    homeworks = {}
+def convert_to_dictionary(table: list[list[str]]) -> dict[int, dict[str, str]]:
+    homeworks: dict[int, dict[str, str]] = {}
     subject = "Предмет"
     date = table[0][1]
     homework = table[0][2]
@@ -33,7 +32,7 @@ def convert_to_dictionary(table):
 
     return homeworks
 
-def save_to_json(dict):
+def save_to_json(data: dict[int, dict[str, str]]) -> None:
     script_path = Path(__file__).resolve()
     script_dir = script_path.parent
 
@@ -42,12 +41,6 @@ def save_to_json(dict):
     final_path.parent.mkdir(exist_ok=True)
     
     with open(final_path, 'w', encoding='utf-8') as f:
-        json.dump(dict, f, ensure_ascii=False, indent=2)
+        json.dump(data, f, ensure_ascii=False, indent=2)
     
     print(f"Данные сохранены в: {final_path}")
-
-
-# save_to_json(convert_to_dictionary(init_table(URL)))
-
-
-# print(table)

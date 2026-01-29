@@ -5,18 +5,25 @@ import json
 import re
 from pathlib import Path
 from config import *
+from typing import TypedDict, NamedTuple, List, Dict
 
-def extract_lesson_and_cabinet(lesson_text):
+class DayLessons(NamedTuple):
+    data: List[List[List[List[str]]]]
+    start_times: List[List[str]]
+    end_times: List[List[str]]
+    indices: List[List[int]]
+
+
+cabinet_patterns = [
+    r'\s+(\d{1,3}[а-яА-Я]?)$',
+    r'\s+([А-Яа-я]{1,3}\d{1,3})$',
+    r'\s+(спорт\.?\s*зал|актовый\s*зал|библиотека)$',
+]
+
+def extract_lesson_and_cabinet(lesson_text: str) -> tuple[str, str]:
     lesson_text = lesson_text.strip()
     if not lesson_text:
         return "", ""
-    
-    # Паттерны для поиска кабинетов
-    cabinet_patterns = [
-        r'\s+(\d{1,3}[а-яА-Я]?)$',  # номер кабинета в конце (123, 45а)
-        r'\s+([А-Яа-я]{1,3}\d{1,3})$',  # кабинет типа Ф12, С23
-        r'\s+(спорт\.?\s*зал|актовый\s*зал|библиотека)$',  # специальные помещения
-    ]
     
     lesson_name = lesson_text
     cabinet = ""
@@ -30,7 +37,7 @@ def extract_lesson_and_cabinet(lesson_text):
     
     return lesson_name, cabinet
 
-def init_table(url):
+def init_table(url: str) -> list[list[str]]:
     response = requests.get(url)
     response.raise_for_status()
 
@@ -43,7 +50,7 @@ def init_table(url):
 
     return table
 
-def get_days_of_week(table, days_of_week_start_marker, days_of_week_stop_marker):
+def get_days_of_week(table: list[list[str]], days_of_week_start_marker: str, days_of_week_stop_marker: str) -> tuple[list[str], list[int]]:
     days_of_week = []
     days_of_week_indexes = []
 
@@ -65,7 +72,7 @@ def get_days_of_week(table, days_of_week_start_marker, days_of_week_stop_marker)
 
     return days_of_week, days_of_week_indexes
 
-def get_classes(table, classes_start_marker, classes_stop_marker):
+def get_classes(table: list[list[str]], classes_start_marker: str, classes_stop_marker: str) -> tuple[list[str], list[int]]:
     classes = []
     classes_indexes = []
 
@@ -87,7 +94,7 @@ def get_classes(table, classes_start_marker, classes_stop_marker):
 
     return classes, classes_indexes
 
-def get_lessons_of_day(table, day_of_week_indexes, classes_indexes):
+def get_lessons_of_day(table: list[list[str]], day_of_week_indexes: list[int], classes_indexes: list[int]) -> DayLessons:
     lessons = []
     lessons_start_time = []
     lessons_end_time = []
@@ -123,7 +130,7 @@ def get_lessons_of_day(table, day_of_week_indexes, classes_indexes):
 
     return lessons, lessons_start_time, lessons_end_time, lessons_indexes
 
-def convert_to_json(table):
+def convert_to_json(table: list[list[str]]) -> None:
     script_path = Path(__file__).resolve()
     script_dir = script_path.parent
 
@@ -137,23 +144,7 @@ def convert_to_json(table):
     
     print(f"Данные сохранены в: {final_path}")
 
-def debug_lessons_structure(lessons, day_index=0, class_index=0):
-    """
-    Функция для отладки структуры уроков
-    """
-    print(f"Отладка структуры уроков для дня {day_index}, класса {class_index}:")
-    
-    if day_index < len(lessons[0]) and class_index < len(lessons[0][day_index]):
-        day_lessons = lessons[0][day_index][class_index]
-        
-        for lesson_index, lesson_time in enumerate(day_lessons):
-            print(f"  Урок {lesson_index + 1}:")
-            for group_index, group_lesson in enumerate(lesson_time):
-                print(f"    Группа {group_index + 1}: '{group_lesson}'")
-    else:
-        print("  Индексы выходят за границы данных")
-
-def init_dictionary(days_of_week, classes, lessons):
+def init_dictionary(days_of_week: list[str], classes: list[str], lessons: list[str]) -> dict[str, str]:
     dict = {}
     
     for x1 in range(len(days_of_week[0])):  # дни недели
@@ -220,26 +211,6 @@ def init_dictionary(days_of_week, classes, lessons):
 
     return dict    
 
-
-def print_schedule_summary(schedule_dict, day="Понедельник", class_name="5С"):
-    """
-    Выводит краткое расписание для отладки
-    """
-    print(f"\n=== Расписание {class_name} на {day} ===")
-    
-    if day in schedule_dict and class_name in schedule_dict[day]:
-        day_schedule = schedule_dict[day][class_name]
-        
-        for lesson_num, lesson_info in day_schedule.items():
-            print(f"\n{lesson_num} урок ({lesson_info['from']} - {lesson_info['to']}):")
-            
-            for lesson in lesson_info['lessons']:
-                groups_str = ", ".join(map(str, lesson['groups']))
-                cabinet_str = f" (каб. {lesson['cabinet']})" if lesson['cabinet'] else ""
-                print(f"  • {lesson['name']}{cabinet_str} - группы: {groups_str}")
-    else:
-        print("Данные не найдены")
-
 if __name__ == "__main__":
     print("собираем информаци...")
     table = init_table(URL)
@@ -249,8 +220,6 @@ if __name__ == "__main__":
     classes = get_classes(table, CLASSES_START_MARKER, CLASSES_STOP_MARKER)
     
     lessons = get_lessons_of_day(table, days_of_week[1], classes[1])
-    
-    # debug_lessons_structure(lessons, 0, 0)
     
     schedule_dict = init_dictionary(days_of_week, classes, lessons)
     
