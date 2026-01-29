@@ -7,9 +7,7 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const authorization_token = process.env.BEARER_TOKEN;
 
-const jsonFilePath = path.join(__dirname, 'data/data.json');
-
-async function getHomework(from_date, to_date, save_to_json=false) {
+async function getHomework(from_date, to_date) {
     let profile_id = null;
 
     const result2 = await getSessions();
@@ -65,4 +63,4 @@ async function getHomework(from_date, to_date, save_to_json=false) {
     }
 }
 
-module.exports = { getHomework, saveToJson };
+module.exports = { getHomework };

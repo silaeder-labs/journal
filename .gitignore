@@ -13,9 +13,14 @@
 
 #для пайэча
 **/__pycache__/
-**/archive
-*.json
-*.env
+
+#разработка
+/archive
+/dev
 /experements
+*.json
+
+#окружение
+*.env
 
 **/node_modules/
