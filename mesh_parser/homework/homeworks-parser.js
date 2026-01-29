@@ -63,4 +63,4 @@ async function getHomework(from_date, to_date) {
     }
 }
 
-module.exports = { getHomework, saveToJson };
+module.exports = { getHomework };

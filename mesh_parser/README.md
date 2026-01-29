@@ -3,7 +3,7 @@
 
 ---
 
-<h2 id="quick-start">Как запустить?</h2>
+## Как запустить?
 
 1. настройка конфига
 создайте файл `.env` в `/mesh_parser` <br>
@@ -17,30 +17,48 @@ BEARER_TOKEN=<ваш токен>
 git clone https://github.com/silaeder-labs/journal #клонирование репозитория
 cd journal #переход в папку
 npm install dotenv # установка библиотек
-node mesh_parser/students_average_marks/mesh-parser.js
 ```
-после завершения программы `.json` файлы будут в папке `/mesh_parser/students_average_marks/data`
+после выполнения этих комманд вы сможете использовать все библиотеки
 
 ---
 
-<h2 id="homework-parsing">Парсинг домашки</h2>
-> Автоматическое получение домашней работы за указаный период
+## Библиотеки
 
 ---
 
-<h3 id="homework-parsing-quick-start">Как запустить?</h3>
+### homework parser
 
-1. добавьте токен в окружение
+#### описание:
+эта библиотека позволяет получать данные по домашке за выбранный временной период
 
-2. импортируйте функцию getHomeWork скрипт homeworks-parser
+#### импорт:
 ```javascript
-const { getHomework } = require(<PATH>);
+const { getHomework } = require('<LIBRARY PATH>');
 ```
 
-3. вызовите функцию указав аргуметы
+#### функции
+- ```getHomework(start_date, end_date)``` 
+
+> [!NOTE]
+> формат даты: "yyyy-mm-dd"
+
+---
+
+### marks parser
+
+#### описание:
+эта библиотека позволяет получать средние оценки по классу за выбраный период
+
+#### импорт:
 ```javascript
-getHomework('2026-01-28', '2026-01-28', false); //1-стартовая дата, 2-конечная дата, 3-сохранять ли в json
+const { getAllMakrs } = require('<LIBRARY PATH>');
 ```
+
+#### функции
+- ```getAllMakrs(end_date, count)``` 
+
+> [!NOTE]
+> формат даты: "yyyy-mm-dd"
 
 > [!NOTE]
 > сегодняшнюю дату можно получить с помощью
