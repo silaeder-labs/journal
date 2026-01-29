@@ -58,12 +58,6 @@ async function getHomework(from_date, to_date, save_to_json=false) {
 
             result[i] = cur_res;
         }
-
-        if(save_to_json) {
-            const jsonString = JSON.stringify(result, null, 2);
-            fs.writeFileSync(jsonFilePath, jsonString, 'utf8');    
-        }    
-
         console.log("completed");
         return result;
     } catch (error) {
@@ -71,7 +65,4 @@ async function getHomework(from_date, to_date, save_to_json=false) {
     }
 }
 
-
-module.exports = { getHomework };
-
-// getHomework('2026-01-28', '2026-01-28', false); //example
+module.exports = { getHomework, saveToJson };

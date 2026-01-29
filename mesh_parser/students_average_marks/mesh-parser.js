@@ -1,17 +1,13 @@
+//imports
 const { getSubjectIdsAndNames } = require('../subjects/subjects_parser.js');
 const { getSessions } = require('../ids/id_parser.js');
 
+//token from .env
 const path = require('path');
-const fs = require('fs');
-
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
-
-const today = new Date().toISOString().split('T')[0];
-
 const authorization_token = process.env.BEARER_TOKEN;
-const URL_BASE = "https://school.mos.ru/api/ej/rating/v1/rank/class";
 
-const jsonFilePath = path.join(__dirname, 'data/data.json');
+const URL_BASE = "https://school.mos.ru/api/ej/rating/v1/rank/class";
 
 function addDays(dateString, days) {
   const date = new Date(dateString);
@@ -40,7 +36,7 @@ async function getRank(url) {
     return users_marks;
 }
 
-async function get_days_marks(curr_day, subject_id, n) {
+async function getDaysMarks(curr_day, subject_id, n) {
     let overall_marks = {};
     const tasks = [];
     for (let j = 0; j <= n; j++) {
@@ -72,7 +68,7 @@ async function getAllMakrs(curr_day, count) {
 
     for (let v = 0; v < subject_ids.length; v++) {
         console.log(`working on: ${subject_names[v]}...`);
-        const marks_final = await get_days_marks(addDays(curr_day, -count), subject_ids[v].toString(), count);
+        const marks_final = await getDaysMarks(addDays(curr_day, -count), subject_ids[v].toString(), count);
         
         const sortedDates = Object.keys(marks_final).sort((a, b) => new Date(a) - new Date(b));
         const sortedMarks = {};
@@ -86,23 +82,4 @@ async function getAllMakrs(curr_day, count) {
     return final_marks;
 }
 
-async function saveToJson(dict) {
-    const jsonString = JSON.stringify(dict, null, 2);
-    fs.writeFileSync(jsonFilePath, jsonString, 'utf8');
-}
-
-async function run() {
-    const dicttest = await getAllMakrs(today, 36);
-    if (dicttest) {
-        await saveToJson(dicttest);
-        console.log("data saved");
-    }
-}
-
-//check if file is running directly
-if (require.main === module) {
-    run();
-}
-
-
-module.exports = { getAllMakrs, saveToJson };
+module.exports = { getAllMakrs };

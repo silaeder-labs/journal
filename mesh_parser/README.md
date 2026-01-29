@@ -41,3 +41,9 @@ const { getHomework } = require(<PATH>);
 ```javascript
 getHomework('2026-01-28', '2026-01-28', false); //1-стартовая дата, 2-конечная дата, 3-сохранять ли в json
 ```
+
+> [!NOTE]
+> сегодняшнюю дату можно получить с помощью
+> ```
+> const today = new Date().toISOString().split('T')[0];
+> ```
