@@ -6,8 +6,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 node_script = os.path.join(
     BASE_DIR,
-    # "..",
-    "export_subjects.js"   # поправь если он в другом месте
+    "export_subjects.js"
 )
 
 result = subprocess.check_output(
