@@ -59,11 +59,11 @@ cursor = conn.cursor()
 subjects_data = get_subjects_info()
 
 averge_marks_column = {
-    "student_mesh_id": "INT UNIQUE PRIMARY KEY",
+    "student_mesh_id": "TEXT UNIQUE PRIMARY KEY",
 }
 
 for i in range(len(subjects_data[1])):
-    averge_marks_column[str(subjects_data[1][i])] = "INT"
+    averge_marks_column[str(subjects_data[1][i])] = "FLOAT"
 
 print(averge_marks_column)
 
