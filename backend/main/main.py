@@ -1,18 +1,23 @@
+import os
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import get_test as gt
+import os
 
 app = FastAPI()
 
-# статика (css, js и т.п.)
-app.mount("/static", StaticFiles(directory="static"), name="static")
+base_path = os.path.dirname(os.path.abspath(__file__))
+frontend_path = os.path.abspath(os.path.join(base_path, "..", "..", "frontend"))
 
-@app.get("/")
-def root():
-    return FileResponse("static/index.html")
+app.mount("/static", StaticFiles(directory=frontend_path), name="static")
+
+@app.get("/statistic")
+def get_statistic_page():
+    html_file = os.path.join(frontend_path, "subjects", "statistic", "index.html")
+    return FileResponse(html_file)
 
 app.add_middleware(
     CORSMiddleware,
