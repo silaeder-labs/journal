@@ -1,4 +1,4 @@
-const { getSubjectIdsAndNames } = require('../../mesh_parser/subjects/subjects_parser');
+const { getSubjectIdsAndNames } = require('../workers/mesh_parser/subjects/subjects_parser');
 
 (async () => {
   try {

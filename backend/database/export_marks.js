@@ -1,4 +1,4 @@
-const { getAllMakrs } = require('../../mesh_parser/marks/mesh-parser');
+const { getAllMakrs } = require('../workers/mesh_parser/marks/mesh-parser');
 const today = new Date().toISOString().split('T')[0];
 
 (async () => {
