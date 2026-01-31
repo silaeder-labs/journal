@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 node_script = os.path.join(
     BASE_DIR,
-    "export_subjects.js"
+    "export_marks.js"
 )
 
 result = subprocess.check_output(
@@ -14,7 +14,8 @@ result = subprocess.check_output(
     text=True
 )
 
-data = json.loads(result)
+print(result)
 
-print(data["subject_ids"])
-print(data["subjects_names"])
+# data = json.loads(result)
+
+# print(data)

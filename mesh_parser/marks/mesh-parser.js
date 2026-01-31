@@ -70,7 +70,7 @@ async function getAllMakrs(curr_day, count) {
     const final_marks = {};
 
     for (let v = 0; v < subject_ids.length; v++) {
-        console.log(`working on: ${subject_names[v]}...`);
+        // console.log(`working on: ${subject_names[v]}...`);
         const marks_final = await getDaysMarks(addDays(curr_day, -count), subject_ids[v].toString(), count);
         
         const sortedDates = Object.keys(marks_final).sort((a, b) => new Date(a) - new Date(b));
@@ -81,8 +81,8 @@ async function getAllMakrs(curr_day, count) {
         
         final_marks[subject_names[v]] = sortedMarks;
     }
-    console.log("completed");
+    // console.log("completed");
     return final_marks;
 }
 
-module.exports = { getAllMakrs };
+module.exports = { getAllMakrs, getDaysMarks };
