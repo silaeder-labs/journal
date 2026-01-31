@@ -1,8 +1,9 @@
-const { getSubjectIdsAndNames } = require('../mesh_parser/subjects/subjects_parser');
+const { getAllMakrs } = require('../../mesh_parser/marks/mesh-parser');
+const today = new Date().toISOString().split('T')[0];
 
 (async () => {
   try {
-    const result = await getSubjectIdsAndNames();
+    const result = await getAllMakrs(today, 0);
     if (!result) {
       process.exit(1);
     }

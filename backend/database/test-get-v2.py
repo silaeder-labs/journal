@@ -14,8 +14,9 @@ result = subprocess.check_output(
     text=True
 )
 
-print(result)
+data = json.loads(result)
 
-# data = json.loads(result)
 
+for subject in data:
+    print(data[subject])
 # print(data)
