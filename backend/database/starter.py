@@ -96,6 +96,28 @@ query = sql.SQL("CREATE TABLE IF NOT EXISTS users ({fields})").format(
     )
 )
 
+skills_columns = {
+    "id": "INT UNIQUE PRIMARY KEY",
+    "math": "INT",
+    "IT": "INT",
+    "backend": "INT",
+    "frontend": "INT",
+    "ML": "INT",
+    "physics": "INT",
+    "russian": "INT",
+    "english": "INT"
+}
+
+query = sql.SQL("CREATE TABLE IF NOT EXISTS skills ({fields})").format(
+    fields=sql.SQL(", ").join(
+        sql.SQL("{} {}").format(
+            sql.Identifier(name),
+            sql.SQL(col_type)
+        )
+        for name, col_type in skills_columns.items()
+    )
+)
+
 cursor.execute(query)
 cursor.close()
 conn.close()
