@@ -37,7 +37,7 @@ def hello(user = Depends(auth.get_current_user)):
 class TextIn(BaseModel):
     text: str
 
-@app.post("/api/user_marks")
+@app.post("/api/user_marks") #af73452e-bbbb-443d-83a2-423f78cd003e
 def reverse_text(data: TextIn, user = Depends(auth.get_current_user)):
     return {"result": gt.get_results_by_user_id(data.text)}
 

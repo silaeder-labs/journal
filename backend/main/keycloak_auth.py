@@ -43,10 +43,9 @@ def upsert_user(user_info: dict, conn):
     cursor.execute("""
         INSERT INTO users (id, keycloack_user_id, first_name, last_name)
         VALUES (%s, %s, %s, %s)
-        ON CONFLICT (id) DO UPDATE SET
+        ON CONFLICT (keycloack_user_id) DO UPDATE SET
             first_name = EXCLUDED.first_name,
-            last_name = EXCLUDED.last_name,
-            keycloack_user_id = EXCLUDED.keycloack_user_id
+            last_name = EXCLUDED.last_name
     """, (
         hash(user_info['sub']) % 2147483647,
         user_info['sub'],
