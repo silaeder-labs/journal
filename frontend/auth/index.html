@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <button onclick="login()">Login</button>
+    <script>
+        function login() {
+            fetch('/api/login')
+                .then(r => r.json())
+                .then(data => window.location.href = data.auth_url);
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('access_token');
+        if (token) {
+            localStorage.setItem('token', token);
+            window.location.href = '/statistic';
+        }
+    </script>
+</body>
+</html>
