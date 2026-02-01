@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>FastAPI + Vue</title>
+  <link rel="stylesheet" href="/static/subjects/statistic/css/style.css">
+  <script src="/static/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <div class="controls">
+        <input v-model="text" placeholder="Введите ваш МЭШ id">
+        <button @click="send" :disabled="loading">
+            {{ loading ? 'Загрузка...' : 'Отправить' }}
+        </button>
+    </div>
+
+
+    <p>{{ result }}</p>
+  <script src="/static/set_mesh_id/js/main.js"></script>
+</body>
+</html>

@@ -24,7 +24,7 @@ def get_subjects_info():
 
 DB_NAME = "marks"
 DB_USER = "test_superuser"
-DB_PASSWORD = "passwords"
+DB_PASSWORD = "password"
 DB_HOST = "127.0.0.1"
 DB_PORT = 5432
 
@@ -78,7 +78,7 @@ query = sql.SQL("CREATE TABLE IF NOT EXISTS average_marks ({fields})").format(
 
 users_columns = {
     "id": "INT UNIQUE PRIMARY KEY",
-    "mesh_student_id": "TEXT UNIQUE",
+    "mesh_student_id": "TEXT",
     "class": "INT",
     "first_name": "TEXT",
     "last_name": "TEXT",

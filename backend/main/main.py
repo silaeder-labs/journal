@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import get_database as gt
 import keycloak_auth as auth
+from set_mesh_id import set_mesh_id_to_database
 
 app = FastAPI()
 
@@ -30,6 +31,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.get("/set-mesh-id")
+def get_statistic_page():
+    html_file = os.path.join(frontend_path, "set_mesh_id", "index.html")
+    return FileResponse(html_file)
+
 @app.get("/api/hello")
 def hello(user = Depends(auth.get_current_user)):
     return {"message": "Привет от FastAPI 🚀", "user": user['preferred_username']}
@@ -48,6 +55,10 @@ def get_columns(user = Depends(auth.get_current_user)):
 @app.get("/api/login")
 def login():
     return {"auth_url": f"{auth.KEYCLOAK_URL}/realms/{auth.REALM}/protocol/openid-connect/auth?client_id={auth.CLIENT_ID}&redirect_uri=http://localhost:8000/api/callback&response_type=code&scope=openid"}
+
+@app.post("/api/set-mesh-id")
+def set_mesh_id(data: TextIn, user = Depends(auth.get_current_user)):
+    set_mesh_id_to_database(data.text, user["sub"])
 
 @app.get("/api/callback")
 def callback(code: str):
