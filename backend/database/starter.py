@@ -82,6 +82,7 @@ users_columns = {
     "class": "INT",
     "first_name": "TEXT",
     "last_name": "TEXT",
+    "middle_name": "TEXT",
     "keycloack_user_id": "TEXT UNIQUE"
 }
 
