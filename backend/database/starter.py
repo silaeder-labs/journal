@@ -58,14 +58,13 @@ cursor = conn.cursor()
 
 subjects_data = get_subjects_info()
 
-averge_marks_column = {
+#таблица средних оценок где для обозначения ученика используется его МЭШ id
+average_marks_columns = {
     "student_mesh_id": "TEXT UNIQUE PRIMARY KEY",
 }
 
 for i in range(len(subjects_data[1])):
-    averge_marks_column[str(subjects_data[1][i])] = "FLOAT"
-
-print(averge_marks_column)
+    average_marks_columns[str(subjects_data[1][i])] = "FLOAT"
 
 query = sql.SQL("CREATE TABLE IF NOT EXISTS average_marks ({fields})").format(
     fields=sql.SQL(", ").join(
@@ -73,7 +72,26 @@ query = sql.SQL("CREATE TABLE IF NOT EXISTS average_marks ({fields})").format(
             sql.Identifier(name),
             sql.SQL(col_type)
         )
-        for name, col_type in averge_marks_column.items()
+        for name, col_type in average_marks_columns.items()
+    )
+)
+
+users_columns = {
+    "id": "INT UNIQUE PRIMARY KEY",
+    "mesh_student_id": "TEXT UNIQUE",
+    "class": "INT",
+    "first_name": "TEXT",
+    "last_name": "TEXT",
+    "keycloack_user_id": "TEXT UNIQUE"
+}
+
+query = sql.SQL("CREATE TABLE IF NOT EXISTS users ({fields})").format(
+    fields=sql.SQL(", ").join(
+        sql.SQL("{} {}").format(
+            sql.Identifier(name),
+            sql.SQL(col_type)
+        )
+        for name, col_type in users_columns.items()
     )
 )
 
