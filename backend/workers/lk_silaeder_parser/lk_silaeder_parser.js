@@ -55,10 +55,9 @@ async function deleteInvalidInformation(data, grade) {
     return result
 }
 
-async function main() {
-    const data = await getStudents();
-    const result = await parseResult(data);
-    const cleared_result = await deleteInvalidInformation(result, 11);
-    // console.log(cleared_result);
-}
-main();
+// async function main() {
+//     const data = await getStudents();
+//     const result = await parseResult(data);
+//     const cleared_result = await deleteInvalidInformation(result, 11);
+// }
+// main();
