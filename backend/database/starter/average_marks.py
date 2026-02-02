@@ -1,5 +1,8 @@
 import psycopg2
 from psycopg2 import sql
+import os
+import subprocess
+import json
 from main import BASE_DIR, DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
 
 def get_subjects_info():

@@ -24,3 +24,6 @@
 *.env
 
 **/node_modules/
+
+#вс код
+*.vscode
