@@ -1,6 +1,6 @@
 import psycopg2
 from psycopg2 import sql
-from main import BASE_DIR, DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
+from starter import BASE_DIR, DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
 
 def init_users():
     conn = psycopg2.connect(
