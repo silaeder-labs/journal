@@ -41,8 +41,8 @@ def verify_token(token: str = Depends(oauth2_scheme)):
 def upsert_user(user_info: dict, conn):
     cursor = conn.cursor()
     cursor.execute("""
-        INSERT INTO users (id, keycloack_user_id, first_name, last_name)
-        VALUES (%s, %s, %s, %s)
+        INSERT INTO users (id, keycloack_user_id, first_name, last_name, middle_name, class)
+        VALUES (%s, %s, %s, %s, %s, %s)
         ON CONFLICT (keycloack_user_id) DO UPDATE SET
             first_name = EXCLUDED.first_name,
             last_name = EXCLUDED.last_name
@@ -50,7 +50,9 @@ def upsert_user(user_info: dict, conn):
         hash(user_info['sub']) % 2147483647,
         user_info['sub'],
         user_info.get('given_name', ''),
-        user_info.get('family_name', '')
+        user_info.get('family_name', ''),
+        user_info.get('middle_name', ''),
+        user_info.get('class', '')
     ))
     conn.commit()
     cursor.close()
