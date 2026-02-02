@@ -24,6 +24,11 @@ def get_statistic_page():
     html_file = os.path.join(frontend_path, "subjects", "statistic", "index.html")
     return FileResponse(html_file)
 
+@app.get("/statistic-me")
+def get_statistic_page():
+    html_file = os.path.join(frontend_path, "subjects", "statisticme", "index.html")
+    return FileResponse(html_file)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -47,6 +52,10 @@ class TextIn(BaseModel):
 @app.post("/api/user_marks") #af73452e-bbbb-443d-83a2-423f78cd003e
 def reverse_text(data: TextIn, user = Depends(auth.get_current_user)):
     return {"result": gt.get_results_by_user_id(data.text)}
+
+@app.post("/api/user_marks_without_id")
+def reverse_text(user = Depends(auth.get_current_user)):
+    return {"result": gt.get_results_by_user_id(str(user["mesh_id"]))}
 
 @app.get("/api/columns")
 def get_columns(user = Depends(auth.get_current_user)):
