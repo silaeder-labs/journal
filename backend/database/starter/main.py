@@ -1,7 +1,5 @@
 import psycopg2
 from psycopg2 import sql
-import subprocess
-import json
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -21,24 +19,28 @@ def init_all():
 
     try: 
         init_database()
-    except:
+    except Exception as e:
         print("database initialization failed")
+        print(e)
         return
 
     try:
         init_skills()
-    except:
+    except Exception as e:
         print("skills initialization failed")
+        print(e)
 
     try: 
         init_users()
-    except:
+    except Exception as e:
         print("users initialization failed")
+        print(e)
 
     try: 
         init_average_marks()
-    except:
+    except Exception as e:
         print("average marks initialization failed")
+        print(e)
 
 
 if __name__ == "__main__":
