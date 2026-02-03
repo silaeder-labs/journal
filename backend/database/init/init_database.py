@@ -1,6 +1,6 @@
 import psycopg2
 from psycopg2 import sql
-from main import get_connection
+from main import get_connection, DB_NAME
 
 def init_database():
     conn = get_connection()

@@ -1,6 +1,10 @@
 from psycopg2 import sql
 import psycopg2
 import get_marks as gm
+import os
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import get_connection
 
 def main():

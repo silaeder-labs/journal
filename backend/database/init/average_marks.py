@@ -3,7 +3,7 @@ from psycopg2 import sql
 import os
 import subprocess
 import json
-from main import get_connection
+from main import get_connection, BASE_DIR
 
 def get_subjects_info():
     node_script = os.path.join(
