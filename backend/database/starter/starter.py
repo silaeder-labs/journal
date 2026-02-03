@@ -1,14 +1,12 @@
 import psycopg2
 from psycopg2 import sql
 import os
+import sys
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-DB_NAME = "marks"
-DB_USER = "test_superuser"
-DB_PASSWORD = "password"
-DB_HOST = "127.0.0.1"
-DB_PORT = 5432
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from config import DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
 
 
 def init_all():

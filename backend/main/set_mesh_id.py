@@ -1,11 +1,10 @@
 import psycopg2
 from psycopg2 import sql
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
-DB_NAME = "marks"
-DB_USER = "test_superuser"
-DB_PASSWORD = "password"
-DB_HOST = "127.0.0.1"
-DB_PORT = 5432
+from database.config import DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
 
 def set_mesh_id_to_database(value, user_id):
     conn = psycopg2.connect(

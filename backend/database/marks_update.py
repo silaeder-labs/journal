@@ -1,7 +1,7 @@
 from psycopg2 import sql
 import psycopg2
 import get_marks as gm
-from starter.starter import DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
+from config import DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
 
 DB_CONFIG = {
     "dbname": DB_NAME,
