@@ -8,13 +8,6 @@
 </head>
 <body>
   <div id="app">
-    <div class="controls">
-        <input v-model="text" placeholder="Введите ID пользователя">
-        <button @click="send" :disabled="loading">
-            {{ loading ? 'Загрузка...' : 'Получить данные' }}
-        </button>
-    </div>
-
     <table class="marks-table" v-if="isVisible">
       <thead>
         <tr>
@@ -31,6 +24,6 @@
     </table>
   </div>
 
-  <script src="/static/subjects/statistic/js/main.js"></script>
+  <script src="/static/user/js/main.js"></script>
 </body>
 </html>
