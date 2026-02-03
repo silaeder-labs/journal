@@ -26,7 +26,12 @@ def get_statistic_page():
 
 @app.get("/statistic-me")
 def get_statistic_page():
-    html_file = os.path.join(frontend_path, "subjects", "statisticme", "index.html")
+    html_file = os.path.join(frontend_path, "subjects", "statistic-me", "index.html")
+    return FileResponse(html_file)
+
+@app.get("/user/{user_id}")
+def get_statistic_page():
+    html_file = os.path.join(frontend_path, "user", "index.html")
     return FileResponse(html_file)
 
 @app.get("/users")
@@ -59,8 +64,12 @@ def reverse_text(data: TextIn, user = Depends(auth.get_current_user)):
     return {"result": gt.get_results_by_user_id(data.text)}
 
 @app.post("/api/user_marks_without_id")
-def reverse_text(user = Depends(auth.get_current_user)):
+def without_id(user = Depends(auth.get_current_user)):
     return {"result": gt.get_results_by_user_id(str(user["mesh_id"]))}
+
+@app.post("/api/average_marks_by_id")
+def marks_by_id(data: TextIn, user = Depends(auth.get_current_user)):
+    return  {"result": gt.marks_by_id(data.text)}
 
 @app.get("/api/columns")
 def get_columns(user = Depends(auth.get_current_user)):

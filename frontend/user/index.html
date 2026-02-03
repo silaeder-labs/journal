@@ -11,17 +11,19 @@
     <table class="marks-table" v-if="isVisible">
       <thead>
         <tr>
-          <th>Пользователь</th>
+          <th>Предмет</th>
+          <th>Оценка</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(user, index) in users" :key="index">
-          <td><a :href="`/user/${ids[index]}`">{{ user }}</a></td>
+        <tr v-for="(item, index) in db_columns" :key="index">
+          <td>{{ item }}</td>
+          <td>{{ result[index] }}</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <script src="/static/subjects/users/js/main.js"></script>
+  <script src="/static/user/js/main.js"></script>
 </body>
 </html>
