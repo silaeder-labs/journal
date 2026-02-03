@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+psycopg2-binary
+python-keycloak
+pyjwt
+python-dotenv
+requests
