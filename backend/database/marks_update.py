@@ -1,13 +1,14 @@
 from psycopg2 import sql
 import psycopg2
 import get_marks as gm
+from starter.starter import DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
 
 DB_CONFIG = {
-    "dbname": "marks",
-    "user": "test_superuser",
-    "password": "password",
-    "host": "127.0.0.1",
-    "port": 5432
+    "dbname": DB_NAME,
+    "user": DB_USER,
+    "password": DB_PASSWORD,
+    "host": DB_HOST,
+    "port": DB_PORT
 }
 
 def main():
