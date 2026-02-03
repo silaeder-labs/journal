@@ -4,7 +4,7 @@ createApp({
   data() {
     return {
       result: [],
-      db_columns: [],
+      users: [],
       isVisible: false,
       loading: false
     }
@@ -26,27 +26,19 @@ createApp({
       this.loading = true;
       try {
         // Выполняем запросы параллельно для скорости
-        const [marksRes, columnsRes] = await Promise.all([
-            this.fetchData('/api/user_marks_without_id', {
-                method: 'POST',
+        const users = await Promise.all([
+            this.fetchData('/api/get-users', {
+                method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
-            }),
-            this.fetchData('/api/columns')
+            })
         ]);
-
-        // Обработка оценок
-        let marks = marksRes.result[0];
-        marks.shift();
-        this.result = marks;
-
-        // Обработка колонок
-        columnsRes.shift();
-        this.db_columns = columnsRes;
+        
+        this.users = users[0];
 
         this.isVisible = true;
       } catch (e) {
         alert("Произошла ошибка при загрузке данных");
-        console.error(e);
+        console.error(e);this.send
       } finally {
         this.loading = false;
       }

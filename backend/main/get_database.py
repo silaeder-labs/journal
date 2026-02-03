@@ -38,3 +38,23 @@ def get_columns_in_database():
     colnames = [desc[0] for desc in cur.description]
 
     return colnames
+
+def get_all_users():
+    connection = psycopg2.connect(
+        user="test_superuser",
+        password="password",
+        host="127.0.0.1",
+        port="5432",
+        database="marks"
+    )
+    
+    cur = connection.cursor()
+
+    cur.execute("SELECT first_name FROM users")
+    rows = cur.fetchall() 
+
+    users = [row[0] for row in rows]
+    
+    cur.close()
+    connection.close()
+    return users

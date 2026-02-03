@@ -29,6 +29,11 @@ def get_statistic_page():
     html_file = os.path.join(frontend_path, "subjects", "statisticme", "index.html")
     return FileResponse(html_file)
 
+@app.get("/users")
+def get_statistic_page():
+    html_file = os.path.join(frontend_path, "subjects", "users", "index.html")
+    return FileResponse(html_file)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -60,6 +65,10 @@ def reverse_text(user = Depends(auth.get_current_user)):
 @app.get("/api/columns")
 def get_columns(user = Depends(auth.get_current_user)):
     return gt.get_columns_in_database()
+
+@app.get("/api/get-users")
+def get_columns(user = Depends(auth.get_current_user)):
+    return gt.get_all_users()
 
 @app.get("/api/login")
 def login():
