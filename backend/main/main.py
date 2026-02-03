@@ -1,4 +1,5 @@
 import os
+import sys
 from fastapi import FastAPI, Depends
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -7,6 +8,9 @@ from pydantic import BaseModel
 import get_database as gt
 import keycloak_auth as auth
 from set_mesh_id import set_mesh_id_to_database
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+from database.config import get_connection
 
 app = FastAPI()
 
@@ -97,7 +101,7 @@ def callback(code: str):
         redirect_uri='http://localhost:8000/api/callback'
     )
     user_info = auth.keycloak_openid.decode_token(token['access_token'], validate=True)
-    conn = psycopg2.connect(user="test_superuser", password="passwords", host="127.0.0.1", port="5432", database="marks")
+    conn = get_connection()
     auth.upsert_user(user_info, conn)
     conn.close()
     return RedirectResponse(url=f"/auth?access_token={token['access_token']}")

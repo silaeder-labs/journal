@@ -1,20 +1,12 @@
 from psycopg2 import sql
 import psycopg2
 import get_marks as gm
-from config import DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
-
-DB_CONFIG = {
-    "dbname": DB_NAME,
-    "user": DB_USER,
-    "password": DB_PASSWORD,
-    "host": DB_HOST,
-    "port": DB_PORT
-}
+from config import get_connection
 
 def main():
     std_marks = gm.get_students_marks()
 
-    conn = psycopg2.connect(**DB_CONFIG)
+    conn = get_connection()
     conn.autocommit = True
     cur = conn.cursor()
 

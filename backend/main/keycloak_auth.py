@@ -5,9 +5,9 @@ import psycopg2
 import jwt
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
-from database.config import DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+from database.config import get_connection
 
 KEYCLOAK_URL = "http://localhost:8080"
 REALM = "myrealm"
@@ -25,13 +25,7 @@ oauth2_scheme = OAuth2AuthorizationCodeBearer(
 )
 
 def get_db():
-    conn = psycopg2.connect(
-        user=DB_USER,
-        password=DB_PASSWORD,
-        host=DB_HOST,
-        port=DB_PORT,
-        database=DB_NAME
-    )
+    conn = get_connection()
     try:
         yield conn
     finally:

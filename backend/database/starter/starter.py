@@ -6,7 +6,7 @@ import sys
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from config import DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
+from config import get_connection
 
 
 def init_all():

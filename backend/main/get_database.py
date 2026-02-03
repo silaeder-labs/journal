@@ -1,13 +1,12 @@
 import psycopg2
+import sys
+import os
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+from database.config import get_connection
 
 def get_results_by_user_id(user_id):
-    connection = psycopg2.connect(
-        user="test_superuser",
-        password="password",
-        host="127.0.0.1",
-        port="5432",
-        database="marks"
-    )
+    connection = get_connection()
 
     cursor = connection.cursor()
 
@@ -24,13 +23,7 @@ def get_results_by_user_id(user_id):
     return records
 
 def get_columns_in_database():
-    connection = psycopg2.connect(
-        user="test_superuser",
-        password="password",
-        host="127.0.0.1",
-        port="5432",
-        database="marks"
-    )
+    connection = get_connection()
     
     cur = connection.cursor()
 
@@ -40,13 +33,7 @@ def get_columns_in_database():
     return colnames
 
 def get_all_users():
-    connection = psycopg2.connect(
-        user="test_superuser",
-        password="password",
-        host="127.0.0.1",
-        port="5432",
-        database="marks"
-    )
+    connection = get_connection()
     
     cur = connection.cursor()
 
@@ -62,13 +49,7 @@ def get_all_users():
     return users, ids
 
 def marks_by_id(user_id):
-    connection = psycopg2.connect(
-        user="test_superuser",
-        password="password",
-        host="127.0.0.1",
-        port="5432",
-        database="marks"
-    )
+    connection = get_connection()
     
     cur = connection.cursor()
 
