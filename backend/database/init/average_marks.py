@@ -8,7 +8,7 @@ from main import get_connection
 def get_subjects_info():
     node_script = os.path.join(
         BASE_DIR,
-        "../export_subjects.js"
+        "../exports/mesh/export_subjects.js"
     )
 
     result = subprocess.check_output(
