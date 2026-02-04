@@ -7,7 +7,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 def get_students_marks():
     marks_export = os.path.join(
         BASE_DIR,
-        "export_marks.js"
+        "../exports/mesh/export_marks.js"
     )
 
     result = subprocess.check_output(

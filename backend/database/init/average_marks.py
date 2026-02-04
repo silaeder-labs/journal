@@ -3,12 +3,12 @@ from psycopg2 import sql
 import os
 import subprocess
 import json
-from starter import BASE_DIR, DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
+from main import get_connection, BASE_DIR
 
 def get_subjects_info():
     node_script = os.path.join(
         BASE_DIR,
-        "../export_subjects.js"
+        "../exports/mesh/export_subjects.js"
     )
 
     result = subprocess.check_output(
@@ -21,13 +21,7 @@ def get_subjects_info():
     return data["subject_ids"], data["subjects_names"]
 
 def init_average_marks():
-    conn = psycopg2.connect(
-        dbname=DB_NAME,
-        user=DB_USER,
-        password=DB_PASSWORD,
-        host=DB_HOST,
-        port=DB_PORT
-    )
+    conn = get_connection()
     conn.autocommit = True
     cursor = conn.cursor()
 

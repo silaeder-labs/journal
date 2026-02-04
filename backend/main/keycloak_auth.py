@@ -3,6 +3,11 @@ from fastapi.security import OAuth2AuthorizationCodeBearer
 from keycloak import KeycloakOpenID
 import psycopg2
 import jwt
+import sys
+import os
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+from database.config import get_connection
 
 KEYCLOAK_URL = "http://localhost:8080"
 REALM = "myrealm"
@@ -20,13 +25,7 @@ oauth2_scheme = OAuth2AuthorizationCodeBearer(
 )
 
 def get_db():
-    conn = psycopg2.connect(
-        user="test_superuser",
-        password="passwords",
-        host="127.0.0.1",
-        port="5432",
-        database="marks"
-    )
+    conn = get_connection()
     try:
         yield conn
     finally:
