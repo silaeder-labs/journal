@@ -8,6 +8,8 @@
 </head>
 <body>
   <div id="app">
+    <details v-for="(classItem, index2) in sortedUniqueClasses" :key="index2">
+    <summary>{{ classItem }}</summary>
     <table class="marks-table" v-if="isVisible">
       <thead>
         <tr>
@@ -15,11 +17,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(user, index) in users" :key="index">
-          <td><a :href="`/user/${ids[index]}`">{{ user }}</a></td>
+        <tr v-for="(user, index) in users" :key="index2">
+          <td v-if="classes[index] === classItem"><a :href="`/user/${ids[index]}`">{{ user }}</a></td>
         </tr>
       </tbody>
     </table>
+    </details>
   </div>
 
   <script src="/static/subjects/users/js/main.js"></script>

@@ -37,16 +37,17 @@ def get_all_users():
     
     cur = connection.cursor()
 
-    cur.execute("SELECT last_name, first_name, middle_name, id FROM users")
+    cur.execute("SELECT last_name, first_name, middle_name, id, class FROM users")
     rows = cur.fetchall() 
 
     users = [f"{row[0]} {row[1]} {row[2]}" for row in rows]
     ids = [row[3] for row in rows]
+    classes = [row[4] for row in rows]
     
     cur.close()
     connection.close()
 
-    return users, ids
+    return users, ids, classes
 
 def marks_by_id(user_id):
     connection = get_connection()
