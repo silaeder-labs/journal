@@ -1,7 +1,7 @@
 import os
 import sys
-from fastapi import FastAPI, Depends
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Depends, HTTPException
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -12,36 +12,14 @@ from set_mesh_id import set_mesh_id_to_database
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from database.config import get_connection
 
+# === Models ===
+
+class TextIn(BaseModel):
+    text: str
+
+# === App Setup ===
+
 app = FastAPI()
-
-base_path = os.path.dirname(os.path.abspath(__file__))
-frontend_path = os.path.abspath(os.path.join(base_path, "..", "..", "frontend"))
-
-app.mount("/static", StaticFiles(directory=frontend_path), name="static")
-
-@app.get("/")
-def root():
-    return FileResponse(os.path.join(frontend_path, "auth", "index.html"))
-
-@app.get("/statistic")
-def get_statistic_page():
-    html_file = os.path.join(frontend_path, "subjects", "statistic", "index.html")
-    return FileResponse(html_file)
-
-@app.get("/statistic-me")
-def get_statistic_page():
-    html_file = os.path.join(frontend_path, "subjects", "statistic-me", "index.html")
-    return FileResponse(html_file)
-
-@app.get("/user/{user_id}")
-def get_statistic_page():
-    html_file = os.path.join(frontend_path, "user", "index.html")
-    return FileResponse(html_file)
-
-@app.get("/users")
-def get_statistic_page():
-    html_file = os.path.join(frontend_path, "subjects", "users", "index.html")
-    return FileResponse(html_file)
 
 app.add_middleware(
     CORSMiddleware,
@@ -50,62 +28,108 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+base_path = os.path.dirname(os.path.abspath(__file__))
+frontend_path = os.path.abspath(os.path.join(base_path, "..", "..", "frontend"))
+
+app.mount("/static", StaticFiles(directory=frontend_path), name="static")
+
+# === HTML Pages ===
+
+@app.get("/")
+def root():
+    return FileResponse(os.path.join(frontend_path, "auth", "index.html"))
+
+@app.get("/auth")
+def auth_page():
+    return FileResponse(os.path.join(frontend_path, "auth", "index.html"))
+
+@app.get("/statistic")
+def statistic_page():
+    return FileResponse(os.path.join(frontend_path, "subjects", "statistic", "index.html"))
+
+@app.get("/statistic-me")
+def statistic_me_page():
+    return FileResponse(os.path.join(frontend_path, "subjects", "statistic-me", "index.html"))
+
+@app.get("/user/{user_id}")
+def user_page(user_id: str):
+    return FileResponse(os.path.join(frontend_path, "user", "index.html"))
+
+@app.get("/users")
+def users_page():
+    return FileResponse(os.path.join(frontend_path, "subjects", "users", "index.html"))
 
 @app.get("/set-mesh-id")
-def get_statistic_page():
-    html_file = os.path.join(frontend_path, "set_mesh_id", "index.html")
-    return FileResponse(html_file)
+def set_mesh_id_page():
+    return FileResponse(os.path.join(frontend_path, "set_mesh_id", "index.html"))
 
-@app.get("/api/hello")
-def hello(user = Depends(auth.get_current_user)):
-    return {"message": "Привет от FastAPI 🚀", "user": user['preferred_username']}
-
-class TextIn(BaseModel):
-    text: str
-
-@app.post("/api/user_marks") #af73452e-bbbb-443d-83a2-423f78cd003e
-def reverse_text(data: TextIn, user = Depends(auth.get_current_user)):
-    return {"result": gt.get_results_by_user_id(data.text)}
-
-@app.post("/api/user_marks_without_id")
-def without_id(user = Depends(auth.get_current_user)):
-    return {"result": gt.get_results_by_user_id(str(user["mesh_id"]))}
-
-@app.post("/api/average_marks_by_id")
-def marks_by_id(data: TextIn, user = Depends(auth.get_current_user)):
-    return  {"result": gt.marks_by_id(data.text)}
-
-@app.get("/api/columns")
-def get_columns(user = Depends(auth.get_current_user)):
-    return gt.get_columns_in_database()
-
-@app.get("/api/get-users")
-def get_columns(user = Depends(auth.get_current_user)):
-    return gt.get_all_users()
+# === Auth Endpoints ===
 
 @app.get("/api/login")
 def login():
     return {"auth_url": f"{auth.KEYCLOAK_URL}/realms/{auth.REALM}/protocol/openid-connect/auth?client_id={auth.CLIENT_ID}&redirect_uri=http://localhost:8000/api/callback&response_type=code&scope=openid"}
 
-@app.post("/api/set-mesh-id")
-def set_mesh_id(data: TextIn, user = Depends(auth.get_current_user)):
-    set_mesh_id_to_database(data.text, user["sub"])
-
 @app.get("/api/callback")
 def callback(code: str):
-    from fastapi.responses import RedirectResponse
-    import psycopg2
-    token = auth.keycloak_openid.token(
-        grant_type='authorization_code',
-        code=code,
-        redirect_uri='http://localhost:8000/api/callback'
-    )
-    user_info = auth.keycloak_openid.decode_token(token['access_token'], validate=True)
-    conn = get_connection()
-    auth.upsert_user(user_info, conn)
-    conn.close()
-    return RedirectResponse(url=f"/auth?access_token={token['access_token']}")
+    try:
+        token = auth.keycloak_openid.token(
+            grant_type='authorization_code',
+            code=code,
+            redirect_uri='http://localhost:8000/api/callback'
+        )
+        user_info = auth.keycloak_openid.decode_token(token['access_token'], validate=True)
+        conn = get_connection()
+        auth.upsert_user(user_info, conn)
+        conn.close()
+        return RedirectResponse(url=f"/auth?access_token={token['access_token']}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Auth failed: {str(e)}")
 
-@app.get("/auth")
-def auth_page():
-    return FileResponse(os.path.join(frontend_path, "auth", "index.html"))
+# === API Endpoints ===
+
+@app.get("/api/hello")
+def hello(user = Depends(auth.get_current_user)):
+    return {"message": "Привет от FastAPI 🚀", "user": user['preferred_username']}
+
+@app.post("/api/user_marks")
+def get_user_marks(data: TextIn, user = Depends(auth.get_current_user)):
+    try:
+        return {"result": gt.get_results_by_user_id(data.text)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get marks: {str(e)}")
+
+@app.post("/api/user_marks_without_id")
+def get_user_marks_without_id(user = Depends(auth.get_current_user)):
+    try:
+        return {"result": gt.get_results_by_user_id(str(user["mesh_id"]))}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get marks: {str(e)}")
+
+@app.post("/api/average_marks_by_id")
+def get_average_marks_by_id(data: TextIn, user = Depends(auth.get_current_user)):
+    try:
+        return {"result": gt.marks_by_id(data.text)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get marks: {str(e)}")
+
+@app.get("/api/columns")
+def get_columns(user = Depends(auth.get_current_user)):
+    try:
+        return gt.get_columns_in_database()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get columns: {str(e)}")
+
+@app.get("/api/get-users")
+def get_users(user = Depends(auth.get_current_user)):
+    try:
+        return gt.get_all_users()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get users: {str(e)}")
+
+@app.post("/api/set-mesh-id")
+def set_mesh_id(data: TextIn, user = Depends(auth.get_current_user)):
+    try:
+        set_mesh_id_to_database(data.text, user["sub"])
+        return {"success": True}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to set mesh id: {str(e)}")
