@@ -8,6 +8,7 @@ from pydantic import BaseModel
 import get_database as gt
 import keycloak_auth as auth
 from set_mesh_id import set_mesh_id_to_database
+from config import URL
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from database.config import get_connection
@@ -67,7 +68,7 @@ def set_mesh_id_page():
 
 @app.get("/api/login")
 def login():
-    return {"auth_url": f"{auth.KEYCLOAK_URL}/realms/{auth.REALM}/protocol/openid-connect/auth?client_id={auth.CLIENT_ID}&redirect_uri=http://localhost:8000/api/callback&response_type=code&scope=openid"}
+    return {"auth_url": f"{auth.KEYCLOAK_URL}/realms/{auth.REALM}/protocol/openid-connect/auth?client_id={auth.CLIENT_ID}&redirect_uri={URL}/api/callback&response_type=code&scope=openid"}
 
 @app.get("/api/callback")
 def callback(code: str):
@@ -75,7 +76,7 @@ def callback(code: str):
         token = auth.keycloak_openid.token(
             grant_type='authorization_code',
             code=code,
-            redirect_uri='http://localhost:8000/api/callback'
+            redirect_uri=f"{URL}/api/callback"
         )
         user_info = auth.keycloak_openid.decode_token(token['access_token'], validate=True)
         conn = get_connection()
