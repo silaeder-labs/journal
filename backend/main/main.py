@@ -58,7 +58,7 @@ def user_page(user_id: str):
 
 @app.get("/users")
 def users_page():
-    return FileResponse(os.path.join(frontend_path, "subjects", "users", "index.html"))
+    return FileResponse(os.path.join(frontend_path, "users", "index.html"))
 
 @app.get("/set-mesh-id")
 def set_mesh_id_page():
