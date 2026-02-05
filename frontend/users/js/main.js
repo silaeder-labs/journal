@@ -4,7 +4,10 @@ createApp({
   data() {
     return {
       result: [],
-      db_columns: [],
+      users: [],
+      ids: [],
+      classes: [],
+      sortedUniqueClasses: [],
       isVisible: false,
       loading: false
     }
@@ -26,32 +29,36 @@ createApp({
       this.loading = true;
       try {
         // Выполняем запросы параллельно для скорости
-        const [marksRes, columnsRes] = await Promise.all([
-            this.fetchData('/api/user-average-marks-by-token-mesh-id', {
-                method: 'POST',
+        const [result] = await Promise.all([
+            this.fetchData('/api/all-users-info', {
+                method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
-            }),
-            this.fetchData('/api/table-columns-by-table-name', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: "average_marks" })
             })
         ]);
+        
+        let users_info = (result.users_info);
 
-        // Обработка оценок
-        let marks = marksRes.marks;
-        marks.shift();
-        this.result = marks;
+        let classes = [];
+        let ids = [];
+        let users = [];
 
-        // Обработка колонок
-        columns = columnsRes.columns
-        columns.shift();
-        this.db_columns = columns;
+        for(let i = 0; i < users_info.length; i++) {
+          classes.push(users_info[i][0]);
+          ids.push(users_info[i][1]);
+          users.push(`${users_info[i][2]} ${users_info[i][3]} ${users_info[i][4]}`);
+        }
+        
+        sortedUniqueClasses = [...new Set(classes)].sort((a, b) => a - b);
+        
+        this.users = users;
+        this.ids = ids;
+        this.classes = classes;
+        this.sortedUniqueClasses = sortedUniqueClasses;
 
         this.isVisible = true;
       } catch (e) {
         alert("Произошла ошибка при загрузке данных");
-        console.error(e);
+        console.error(e);this.send
       } finally {
         this.loading = false;
       }

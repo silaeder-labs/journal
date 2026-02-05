@@ -9,14 +9,14 @@ def init_skills():
 
     skills_columns = {
         "id": "INT UNIQUE PRIMARY KEY",
-        "math": "INT",
-        "IT": "INT",
-        "backend": "INT",
-        "frontend": "INT",
-        "ML": "INT",
-        "physics": "INT",
-        "russian": "INT",
-        "english": "INT"
+        "math": "INT DEFAULT 0",
+        "IT": "INT DEFAULT 0",
+        "backend": "INT DEFAULT 0",
+        "frontend": "INT DEFAULT 0",
+        "ML": "INT DEFAULT 0",
+        "physics": "INT DEFAULT 0",
+        "russian": "INT DEFAULT 0",
+        "english": "INT DEFAULT 0"
     }
 
     query = sql.SQL("CREATE TABLE IF NOT EXISTS skills ({fields})").format(

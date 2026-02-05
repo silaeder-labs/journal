@@ -29,7 +29,7 @@ def init_average_marks():
 
     #таблица средних оценок где для обозначения ученика используется его МЭШ id
     average_marks_columns = {
-        "student_mesh_id": "TEXT UNIQUE PRIMARY KEY",
+        "mesh_student_id": "TEXT UNIQUE PRIMARY KEY",
     }
 
     for i in range(len(subjects_data[1])):

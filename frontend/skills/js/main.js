@@ -3,9 +3,8 @@ const { createApp } = Vue
 createApp({
   data() {
     return {
-      result: [],
-      users: [],
-      ids: [],
+      columns: [],
+      skills: [],
       isVisible: false,
       loading: false
     }
@@ -27,23 +26,31 @@ createApp({
       this.loading = true;
       try {
         // Выполняем запросы параллельно для скорости
-        const result = await Promise.all([
-            this.fetchData('/api/get-users', {
+        const [skillsRes, columnsRes] = await Promise.all([
+            this.fetchData('/api/user-skills-by-user-id', {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
+            }),
+            this.fetchData('/api/table-columns-by-table-name', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: "skills" })
             })
         ]);
 
-        users = result[0][0];
-        ids = result[0][1];
+        let skills = skillsRes.skills;
+        let columns = columnsRes.columns;
+
+        columns.shift();
+        skills.shift();
         
-        this.users = users;
-        this.ids = ids;
+        this.columns = columns;
+        this.skills = skills;
 
         this.isVisible = true;
       } catch (e) {
         alert("Произошла ошибка при загрузке данных");
-        console.error(e);this.send
+        console.error(e);
       } finally {
         this.loading = false;
       }

@@ -29,22 +29,27 @@ createApp({
       try {
         // Выполняем запросы параллельно для скорости
         const [marksRes, columnsRes] = await Promise.all([
-            this.fetchData('/api/average_marks_by_id', {
+            this.fetchData('/api/user-average-marks-by-user-id', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: lastSegment})
+                body: JSON.stringify({ text: lastSegment })
             }),
-            this.fetchData('/api/columns')
+            this.fetchData('/api/table-columns-by-table-name', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: "average_marks" })
+            })
         ]);
 
         // Обработка оценок
-        let marks = marksRes.result[0];
+        let marks = marksRes.marks;
         marks.shift();
         this.result = marks;
 
         // Обработка колонок
-        columnsRes.shift();
-        this.db_columns = columnsRes;
+        columns = columnsRes.columns
+        columns.shift();
+        this.db_columns = columns;
 
         this.isVisible = true;
       } catch (e) {

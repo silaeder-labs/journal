@@ -16,7 +16,7 @@ def main():
 
     try:
         for student_id, subjects in std_marks.items():
-            columns = ["student_mesh_id"]
+            columns = ["mesh_student_id"]
             values = [student_id]
             
             for subject, mark in subjects.items():
@@ -25,13 +25,13 @@ def main():
 
             update_fragments = [
                 sql.SQL("{} = EXCLUDED.{}").format(sql.Identifier(col), sql.Identifier(col))
-                for col in columns if col != "student_mesh_id"
+                for col in columns if col != "mesh_student_id"
             ]
 
             query = sql.SQL("""
                 INSERT INTO average_marks ({fields})
                 VALUES ({placeholders})
-                ON CONFLICT (student_mesh_id)
+                ON CONFLICT (mesh_student_id)
                 DO UPDATE SET {updates}
             """).format(
                 fields=sql.SQL(", ").join(map(sql.Identifier, columns)),
