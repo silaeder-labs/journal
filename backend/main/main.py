@@ -5,7 +5,6 @@ from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import get_database as gt
 import database_api as db_api
 import keycloak_auth as auth
 from set_mesh_id import set_mesh_id_to_database
@@ -60,10 +59,6 @@ def user_page(user_id: str):
 @app.get("/users")
 def users_page():
     return FileResponse(os.path.join(frontend_path, "users", "index.html"))
-
-@app.get("/set-mesh-id")
-def set_mesh_id_page():
-    return FileResponse(os.path.join(frontend_path, "set_mesh_id", "index.html"))
 
 @app.get("/skills")
 def skills_page():
@@ -123,30 +118,3 @@ def get_all_users_info(user = Depends(auth.get_current_user)):
 @app.get("/api/user-skills-by-user-id")
 def get_all_users_info(user = Depends(auth.get_current_user)):
     return {"skills": db_api.get_student_skills_by_id(db_api.convert_from_mesh_id_to_normal_id(user["mesh_id"]))}
-
-
-
-@app.post("/api/average_marks_by_id")
-def get_average_marks_by_id(data: TextIn, user = Depends(auth.get_current_user)):
-    return {"result": gt.get_results_by_user_id(data.text, "average_marks")}
-
-@app.post("/api/skills_by_id")
-def get_skills_by_user_id(user = Depends(auth.get_current_user)):
-    return {"result": gt.get_results_by_user_id(gt.get_mesh_id_by_keycloak_id(user["sub"]), "skills")}
-
-@app.get("/api/average_marks_columns")
-def get_average_marks_columns(user = Depends(auth.get_current_user)):
-    return gt.get_columns_in_database("average_marks")
-
-@app.get("/api/skills_columns")
-def get_average_marks_columns(user = Depends(auth.get_current_user)):
-    return gt.get_columns_in_database("skills")
-
-@app.get("/api/get-users")
-def get_users(user = Depends(auth.get_current_user)):
-    return gt.get_all_users()
-
-@app.post("/api/set-mesh-id")
-def set_mesh_id(data: TextIn, user = Depends(auth.get_current_user)):
-    set_mesh_id_to_database(data.text, user["sub"])
-    return {"success": True}
