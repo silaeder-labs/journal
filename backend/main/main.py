@@ -118,6 +118,12 @@ def get_table_columns_by_table_name(data: TextIn, user = Depends(auth.get_curren
 def get_all_users_info(user = Depends(auth.get_current_user)):
     return {"users_info": db_api.get_all_students_info()}
 
+# == Skills ==
+
+@app.get("/api/user-skills-by-user-id")
+def get_all_users_info(user = Depends(auth.get_current_user)):
+    return {"skills": db_api.get_student_skills_by_id(db_api.convert_from_mesh_id_to_normal_id(user["mesh_id"]))}
+
 
 
 @app.post("/api/average_marks_by_id")

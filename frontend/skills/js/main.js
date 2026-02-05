@@ -3,8 +3,8 @@ const { createApp } = Vue
 createApp({
   data() {
     return {
-      result: [],
-      db_columns: [],
+      columns: [],
+      skills: [],
       isVisible: false,
       loading: false
     }
@@ -26,22 +26,26 @@ createApp({
       this.loading = true;
       try {
         // Выполняем запросы параллельно для скорости
-        const [marksRes, columnsRes] = await Promise.all([
-            this.fetchData('/api/skills_by_id', {
-                method: 'POST',
+        const [skillsRes, columnsRes] = await Promise.all([
+            this.fetchData('/api/user-skills-by-user-id', {
+                method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             }),
-            this.fetchData('/api/skills_columns')
+            this.fetchData('/api/table-columns-by-table-name', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: "skills" })
+            })
         ]);
 
-        // Обработка оценок
-        let marks = marksRes.result[0];
-        marks.shift();
-        this.result = marks;
+        let skills = skillsRes.skills;
+        let columns = columnsRes.columns;
 
-        // Обработка колонок
-        columnsRes.shift();
-        this.db_columns = columnsRes;
+        columns.shift();
+        skills.shift();
+        
+        this.columns = columns;
+        this.skills = skills;
 
         this.isVisible = true;
       } catch (e) {
