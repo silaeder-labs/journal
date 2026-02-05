@@ -29,16 +29,25 @@ createApp({
       this.loading = true;
       try {
         // Выполняем запросы параллельно для скорости
-        const result = await Promise.all([
-            this.fetchData('/api/get-users', {
+        const [result] = await Promise.all([
+            this.fetchData('/api/all-users-info', {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             })
         ]);
+        
+        let users_info = (result.users_info);
 
-        users = result[0][0];
-        ids = result[0][1];
-        classes = result[0][2];
+        let classes = [];
+        let ids = [];
+        let users = [];
+
+        for(let i = 0; i < users_info.length; i++) {
+          classes.push(users_info[i][0]);
+          ids.push(users_info[i][1]);
+          users.push(`${users_info[i][2]} ${users_info[i][3]} ${users_info[i][4]}`);
+        }
+        
         sortedUniqueClasses = [...new Set(classes)].sort((a, b) => a - b);
         
         this.users = users;

@@ -93,17 +93,32 @@ def callback(code: str):
 
 # === API Endpoints ===
 
-@app.get("/api/hello")
-def hello(user = Depends(auth.get_current_user)):
-    return {"message": "Привет от FastAPI 🚀", "user": user['preferred_username']}
-
-@app.post("/api/user_average_marks_by_mesh_id")
+# == Marks ==
+@app.post("/api/user-average-marks-by-user-id")
 def get_user_average_marks_by_mesh_id(data: TextIn, user = Depends(auth.get_current_user)):
-    return {"result": db_api.get_student_marks_by_mesh_id(data.text)}
+    return {"marks": db_api.get_student_marks_by_mesh_id(db_api.convert_from_normal_id_to_mesh_id(int(data.text)))}
 
-@app.post("/api/user_marks_without_id")
+@app.post("/api/user-average-marks-by-mesh-id")
+def get_user_average_marks_by_mesh_id(data: TextIn, user = Depends(auth.get_current_user)):
+    return {"marks": db_api.get_student_marks_by_mesh_id(data.text)}
+
+@app.post("/api/user-average-marks-by-token-mesh-id")
 def get_user_marks_without_id(user = Depends(auth.get_current_user)):
-    return {"result": gt.data_by_id(str(user["mesh_id"]), "average_marks")}
+    return {"marks": db_api.get_student_marks_by_mesh_id(user["mesh_id"])}
+
+# == Columns ==
+
+@app.post("/api/table-columns-by-table-name")
+def get_table_columns_by_table_name(data: TextIn, user = Depends(auth.get_current_user)):
+    return {"columns": db_api.get_table_columns(data.text)}
+
+# == Users ==
+
+@app.get("/api/all-users-info")
+def get_all_users_info(user = Depends(auth.get_current_user)):
+    return {"users_info": db_api.get_all_students_info()}
+
+
 
 @app.post("/api/average_marks_by_id")
 def get_average_marks_by_id(data: TextIn, user = Depends(auth.get_current_user)):

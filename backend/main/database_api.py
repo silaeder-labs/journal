@@ -33,7 +33,7 @@ def get_all_students_info() -> list[list[int, int, str, str, str]]:
 
     cursor.execute(query)
 
-    users_info = cursor.fetchall()
+    users_info = [list(row) for row in cursor.fetchall()]
 
     if connection:
         cursor.close()
