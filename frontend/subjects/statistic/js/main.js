@@ -25,16 +25,16 @@ createApp({
       try {
         // Выполняем запросы параллельно для скорости
         const [marksRes, columnsRes] = await Promise.all([
-            this.fetchData('/api/user_marks', {
+            this.fetchData('/api/user_average_marks_by_mesh_id', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ text: this.text })
             }),
-            this.fetchData('/api/columns')
+            this.fetchData('/api/average_marks_columns')
         ]);
 
         // Обработка оценок
-        let marks = marksRes.result[0];
+        let marks = marksRes.result;
         marks.shift();
         this.result = marks;
 

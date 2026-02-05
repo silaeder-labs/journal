@@ -31,7 +31,7 @@ createApp({
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             }),
-            this.fetchData('/api/columns')
+            this.fetchData('/api/average_marks_columns')
         ]);
 
         // Обработка оценок

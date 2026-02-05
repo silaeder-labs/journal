@@ -5,12 +5,12 @@ import os
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from database.config import get_connection
 
-def get_results_by_user_id(user_id):
+def get_results_by_user_mesh_id(user_id, table_name):
     connection = get_connection()
 
     cursor = connection.cursor()
 
-    query = "SELECT * FROM average_marks WHERE student_mesh_id = %s;"
+    query = f"SELECT * FROM { table_name } WHERE student_mesh_id = %s;"
 
     cursor.execute(query, (user_id,))
 
@@ -22,12 +22,72 @@ def get_results_by_user_id(user_id):
 
     return records
 
-def get_columns_in_database():
+
+def get_mesh_id_by_keycloak_id(keycloak_user_id):
+    connection = get_connection()
+
+    cur = connection.cursor()
+    cur.execute("SELECT mesh_student_id FROM users WHERE keycloack_user_id = %s", (keycloak_user_id,))
+
+    result = cur.fetchone()
+
+    connection.close()
+
+    return result[0]
+
+def get_results_by_user_id(user_id, table_name):
     connection = get_connection()
     
     cur = connection.cursor()
 
-    cur.execute("SELECT * FROM average_marks LIMIT 0")
+    cur.execute("SELECT id FROM users WHERE mesh_student_id = %s", (user_id,))
+
+    rows = cur.fetchone()
+
+    cursor = connection.cursor()
+
+    query = f"SELECT * FROM { table_name } WHERE id = %s;"
+
+    cursor.execute(query, (rows[0],))
+
+    records = cursor.fetchall()
+
+    if connection:
+        cursor.close()
+        connection.close()
+
+    return records
+
+def get_marks_by_user_id(user_id):
+    connection = get_connection()
+    
+    cur = connection.cursor()
+
+    cur.execute("SELECT id FROM users WHERE mesh_student_id = %s", (user_id,))
+
+    rows = cur.fetchone()
+
+    cursor = connection.cursor()
+
+    query = f"SELECT * FROM { table_name } WHERE id = %s;"
+
+    cursor.execute(query, (rows[0],))
+
+    records = cursor.fetchall()
+
+    if connection:
+        cursor.close()
+        connection.close()
+
+    return records
+
+
+def get_columns_in_database(table_name):
+    connection = get_connection()
+    
+    cur = connection.cursor()
+
+    cur.execute(f"SELECT * FROM { table_name } LIMIT 0")
     colnames = [desc[0] for desc in cur.description]
 
     return colnames
@@ -49,16 +109,21 @@ def get_all_users():
 
     return users, ids, classes
 
-def marks_by_id(user_id):
+def data_by_id(user_id, table_name):
     connection = get_connection()
-    
-    cur = connection.cursor()
+    cursor = connection.cursor()
 
-    cur.execute("SELECT mesh_student_id FROM users WHERE id = %s", (user_id,))
+    query = f"SELECT * FROM { table_name } WHERE student_mesh_id = %s;"
 
-    rows = cur.fetchone() 
+    cursor.execute(query, (user_id,))
 
-    return get_results_by_user_id(rows[0])
+    records = cursor.fetchall()
+
+    if connection:
+        cursor.close()
+        connection.close()
+
+    return records
 
 if __name__ == "__main__":
-    print(marks_by_id("1183460296"))
+    print(get_results_by_user_id("769221691", "skills"))

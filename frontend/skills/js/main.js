@@ -27,11 +27,11 @@ createApp({
       try {
         // Выполняем запросы параллельно для скорости
         const [marksRes, columnsRes] = await Promise.all([
-            this.fetchData('/api/user_marks_without_id', {
+            this.fetchData('/api/skills_by_id', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             }),
-            this.fetchData('/api/columns')
+            this.fetchData('/api/skills_columns')
         ]);
 
         // Обработка оценок

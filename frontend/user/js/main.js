@@ -34,7 +34,7 @@ createApp({
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ text: lastSegment})
             }),
-            this.fetchData('/api/columns')
+            this.fetchData('/api/average_marks_columns')
         ]);
 
         // Обработка оценок

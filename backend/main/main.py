@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import get_database as gt
+import database_api as db_api
 import keycloak_auth as auth
 from set_mesh_id import set_mesh_id_to_database
 from config import URL
@@ -64,6 +65,10 @@ def users_page():
 def set_mesh_id_page():
     return FileResponse(os.path.join(frontend_path, "set_mesh_id", "index.html"))
 
+@app.get("/skills")
+def skills_page():
+    return FileResponse(os.path.join(frontend_path, "skills", "index.html"))
+
 # === Auth Endpoints ===
 
 @app.get("/api/login")
@@ -92,45 +97,35 @@ def callback(code: str):
 def hello(user = Depends(auth.get_current_user)):
     return {"message": "Привет от FastAPI 🚀", "user": user['preferred_username']}
 
-@app.post("/api/user_marks")
-def get_user_marks(data: TextIn, user = Depends(auth.get_current_user)):
-    try:
-        return {"result": gt.get_results_by_user_id(data.text)}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to get marks: {str(e)}")
+@app.post("/api/user_average_marks_by_mesh_id")
+def get_user_average_marks_by_mesh_id(data: TextIn, user = Depends(auth.get_current_user)):
+    return {"result": db_api.get_student_marks_by_mesh_id(data.text)}
 
 @app.post("/api/user_marks_without_id")
 def get_user_marks_without_id(user = Depends(auth.get_current_user)):
-    try:
-        return {"result": gt.get_results_by_user_id(str(user["mesh_id"]))}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to get marks: {str(e)}")
+    return {"result": gt.data_by_id(str(user["mesh_id"]), "average_marks")}
 
 @app.post("/api/average_marks_by_id")
 def get_average_marks_by_id(data: TextIn, user = Depends(auth.get_current_user)):
-    try:
-        return {"result": gt.marks_by_id(data.text)}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to get marks: {str(e)}")
+    return {"result": gt.get_results_by_user_id(data.text, "average_marks")}
 
-@app.get("/api/columns")
-def get_columns(user = Depends(auth.get_current_user)):
-    try:
-        return gt.get_columns_in_database()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to get columns: {str(e)}")
+@app.post("/api/skills_by_id")
+def get_skills_by_user_id(user = Depends(auth.get_current_user)):
+    return {"result": gt.get_results_by_user_id(gt.get_mesh_id_by_keycloak_id(user["sub"]), "skills")}
+
+@app.get("/api/average_marks_columns")
+def get_average_marks_columns(user = Depends(auth.get_current_user)):
+    return gt.get_columns_in_database("average_marks")
+
+@app.get("/api/skills_columns")
+def get_average_marks_columns(user = Depends(auth.get_current_user)):
+    return gt.get_columns_in_database("skills")
 
 @app.get("/api/get-users")
 def get_users(user = Depends(auth.get_current_user)):
-    try:
-        return gt.get_all_users()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to get users: {str(e)}")
+    return gt.get_all_users()
 
 @app.post("/api/set-mesh-id")
 def set_mesh_id(data: TextIn, user = Depends(auth.get_current_user)):
-    try:
-        set_mesh_id_to_database(data.text, user["sub"])
-        return {"success": True}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to set mesh id: {str(e)}")
+    set_mesh_id_to_database(data.text, user["sub"])
+    return {"success": True}
