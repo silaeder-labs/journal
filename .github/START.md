@@ -16,19 +16,21 @@
 2. создайте новый realm и назовите myrealm
 <img src="resources/images/realm_creation.png" width="700" alt="фото настройки attributes">
 
-3. выберите ваш realm и создайте клиента с id: myapp, в valid redirect URIs поставьте /*
+3. выберите ваш realm и создайте клиента с id: myapp
+> [!WARNING]
+> в valid redirect URIs поставьте localhost:8000/* или другой адрес, если вы его поменяли
 <img src="resources/images/client_creation.png" width="700" alt="фото настройки attributes">
 
-4. добавьте роль teacher в ваш myapp
+5. добавьте роль teacher в ваш myapp
 <img src="resources/images/role_setup.png" width="700" alt="фото настройки attributes">
 
-5. добавьте аттрибуты (class, middleName, mesh_id) в realm 
+6. добавьте аттрибуты (class, middleName, mesh_id) в realm 
 <img src="resources/images/realm_settings_example.png" width="700" alt="фото настройки attributes">
 
-6. создайте все три аттрибута (для class добавьте валидатор, что это число от 5 до 11)
+7. создайте все три аттрибута (для class добавьте валидатор, что это число от 5 до 11)
 <img src="resources/images/attribute_setup.png" width="700" alt="фото настройки attributes">
 
-7. создайте mappers для mesh_id и class
+8. создайте mappers для mesh_id и class
 <img src="resources/images/mapping-setup-1.png" width="700" alt="фото настройки attributes">
 <img src="resources/images/mapping-setup-2.png" width="700" alt="фото настройки attributes">
 <img src="resources/images/mapping-setup-3.png" width="700" alt="фото настройки attributes">
